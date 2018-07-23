@@ -2,7 +2,7 @@ Package: CAWaR
 Type: Package
 Title: CAWa project R package
 Version: 0.0.1
-Date: 2018-04-13
+Date: 2018-07-18
 Authors@R: person("Ruben", "Remelgado", role = c("aut", "cre"), email="ruben.remelgado@uni-wuerzburg.de")
 URL: https://github.com/RRemelgado/fieldRS/
 BugReports: https://github.com/RRemelgado/fieldRS/issues/

@@ -1,7 +1,7 @@
 #' @title analyzeTS
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
-#' @param x Object of class \emph{matrix} or \emph{data.frame}.
+#' @param x Object of class \emph{data.frame}.
 #' @param y Vector of class \emph{character} or \emph{numeric} with a length equal to the number of rows in \emph{x}.
 #' @return A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampeled pixels.
 #' @importFrom ggplot2 ggplot aes_string theme_bw ggtitle geom_ribbon geom_line xlab ylab ylim
@@ -14,7 +14,7 @@
 #'  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
 #'  \item{\emph{y.r2} - \eqn{R^{2}} between the each row in \emph{x} and the median values for each unique class found in \emph{y.statistics}.}
 #'  \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}}
-#' @seealso \code{\link{extractTS}} \code{\link{assignClass}} \code{\link{classModel}}
+#' @seealso \code{\link{extractTS}} \code{\link{r2Class}}
 #' @examples {
 #' 
 #' require(raster)
@@ -29,11 +29,11 @@
 #' data(referenceProfiles)
 #' 
 #' # derive time series
-#' ev <- extractTS(fieldData[3:4,], r)
+#' ev <- extractTS(fieldData[3,], extend(r, 60))
 #' 
-#' ac <- assignClass(ev$weighted.mean, referenceProfiles[,2:6])
+#' ac <- r2Class(ev$weighted.mean, referenceProfiles[,2:6])
 #' 
-#' a.ts <- analyzeTS(ev$weighted.mean, referenceProfiles[ac$class,1])
+#' a.ts <- analyzeTS(as.data.frame(ev$weighted.mean), referenceProfiles[ac$class,1])
 #' 
 #' }
 #' @export
@@ -65,10 +65,12 @@ analyzeTS <- function(x, y) {
   # derive statistics and plots
   tmp <- lapply(unique.y, function(u) {
     i <- which(y == u)
+    v <- as.matrix(x[i,])
     d <- data.frame(v1=as.numeric(apply(x[i,], 2, median, na.rm=TRUE)), v2=as.numeric(apply(x[i,], 2, mad, na.rm=TRUE)),
                     v3=as.numeric(apply(x[i,], 2, min, na.rm=TRUE)), v4=as.numeric(apply(x[i,], 2, max, na.rm=TRUE)),
-                    v5=as.numeric(apply(x[i,], 2, mean, na.rm=TRUE)), v6=as.numeric(apply(x[i,], 2, sd, na.rm=TRUE)), id=unique.id)
-    colnames(d) <- c("median", "mad", "min", "max", "mean", "sd", "id")
+                    v5=as.numeric(apply(x[i,], 2, mean, na.rm=TRUE)), v6=as.numeric(apply(x[i,], 2, sd, na.rm=TRUE)), 
+                    id=unique.id, class=u, stringsAsFactors=FALSE)
+    colnames(d) <- c("median", "mad", "min", "max", "mean", "sd", "id", "class")
     d0 <- d[,c("median", "mad", "id")]
     d0$um <- d$median+d$mad
     d0$lm <- d$median-d$mad

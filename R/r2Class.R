@@ -29,34 +29,38 @@ r2Class <- function(x, y) {
   if (length(x) != ncol(y)) {stop('"x" has a different lenght from the number of columns in "y"')}
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 2. Check variables
+# 2. Correlate time series
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
   # assure x si a numeric variable (failure in cor() otherwise)
   x <- as.numeric(x)
 
   # correlate x with reference profiles in y
-  c <- lapply(1:nrow(y), function(r) {
+  c <- sapply(1:nrow(y), function(r) {
     i <- which(!is.na(y[r,]) & !is.na(x))
     r <- try(cor(as.numeric(y[r,i]), x[i]), silent=TRUE)
-    return(ifelse(class(c)[1] == "try-error", NA, c^2))})
+    return(ifelse(class(c)[1] == "try-error", NA, r^2))})
 
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
+# 3. Select target class
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
+  
   # check if further anaylsis are possible
   if (sum(!is.na(c)) == 0) {return(list(class=NA, r2=NA, r2diff=NA, rmse=NA))} else {
 
     # find best fit
-    m <- max(c, na.rn=TRUE)
+    m <- max(c, na.rm=TRUE)
     i1 <- which(c == m)
     i2 <- which(!is.na(y[i1,]) & !is.na(x))
 
     # derive bi-products
     r <- c[i1]
     e <- sqrt(sum((y[i1,i2] - x[i2])^2))
-    c <- rev(order(c))
     d <- c[1]-c[2]
+    c <- rev(order(c))
 
     # check if profile is above the class minimum
-    ov <- list(class=i1, r2=r, r2diff=d, rmse=e, count=length(i2))}
+    ov <- data.frame(class=i1, r2=r, r2diff=d, rmse=e, count=length(i2))}
 
     # final output
     return(ov)

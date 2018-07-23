@@ -1,6 +1,6 @@
 #' @title checkSamples
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description checks if a shapefile
+#' @description checks if a shapefile with ground truth data contains all the necessary fields in the correct format.
 #' @param samples Vector of class \emph{character}.
 #' @return A \emph{data.frame} with the consistency checks for each element in \emph{samples}.
 #' @importFrom raster shapefile
@@ -9,7 +9,7 @@
 #'  \item{\emph{sampler} - Character vector with name of responsible person.}
 #'  \item{\emph{date} - Date vector with the date on which each sample was collected (formated as "yyyy-mm-dd").}
 #'  \item{\emph{label} - Character vector sample label (e.g. land cover class).}}}
-#' @seealso \code{\link{labelCheck}}
+#' @seealso \code{\link[fieldRS]{labelCheck}}
 #' @examples {}
 #' @export
 

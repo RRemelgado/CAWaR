@@ -25,7 +25,7 @@
 #' # read field data
 #' data(fielData)
 #' 
-#' agg.label <- splitSamples(fieldData[1,], r, fieldData$crop[1], agg.radius=90)
+#' agg.label <- splitSamples(fieldData[1,], r, fieldData$crop[1], agg.radius=30)
 #' 
 #' # show labels
 #' agg.label$region.id
