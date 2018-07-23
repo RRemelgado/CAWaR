@@ -1,6 +1,6 @@
 #' @title phenoCropVal
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Spatialy explicit and phenology driven validation and classification scheme for cropland mapping.
+#' @description Spatialy explicit and phenology driven validation scheme for cropland mapping.
 #' @param x A \emph{matrix} or \emph{data.frame}.
 #' @param y A \emph{character} vector.
 #' @param z A \emph{character} vector.

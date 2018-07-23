@@ -14,7 +14,7 @@
 #'  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
 #'  \item{\emph{y.r2} - \eqn{R^{2}} between the each row in \emph{x} and the median values for each unique class found in \emph{y.statistics}.}
 #'  \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}}
-#' @seealso \code{\link{extractTS}} \code{\link{r2Class}}
+#' @seealso \code{\link{extractTS}} \code{\link{phenoCropClass}}
 #' @examples {
 #' 
 #' require(raster)
@@ -30,8 +30,6 @@
 #' 
 #' # derive time series
 #' ev <- extractTS(fieldData[3,], extend(r, 60))
-#' 
-#' ac <- r2Class(ev$weighted.mean, referenceProfiles[,2:6])
 #' 
 #' a.ts <- analyzeTS(as.data.frame(ev$weighted.mean), referenceProfiles[ac$class,1])
 #' 
