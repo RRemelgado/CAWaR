@@ -17,7 +17,23 @@ NULL
 #'
 #' @docType data
 #' @keywords datasets
-#' @name fieldData
+#' @name fieldDataTS
 #' @usage data(fieldDataTS)
+#' @format A data.frame
+NULL
+
+#' Region labels for fieldData
+#'
+#' Output of splitSamples for fieldData.
+#'
+#' \itemize{
+#'   \item{region.id}{Region identifier showing which samples are grouped.}
+#'   \item{region.frequency}{Frequency of samples per region.}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name fieldDataCluster
+#' @usage data(fieldDataCluster)
 #' @format A data.frame
 NULL

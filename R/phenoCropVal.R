@@ -14,7 +14,7 @@
 #' final output consists of:
 #' \itemize{
 #'  \item{\emph{sample.validation} - A \emph{logical} vector with the same length of \emph{x} where TRUE means it was correctly classied.}
-#'  \item{\emph{class.accuracy} - A \emph{data.frame} with an F1-score for each unique class in \emph{y}.}}}
+#'  \item{\emph{class.accuracy} - A \emph{data.frame} with sample count per class, precision, recall and F1-scores per unique class in \emph{y}.}}}
 #' @seealso \code{\link{extractTS}} \code{\link{phenoCropClass}}
 #' @examples {
 #' 
@@ -30,11 +30,15 @@
 #' # read reference profiles
 #' data(referenceProfiles)
 #' 
-#' # derive time series
-#' ev <- as.data.frame(extractTS(fieldData, extend(r, 60))$weighted.mean)
+#' # read time series
+#' data(fieldDataTS)
+#' fieldDataTS <- as.data.frame(fieldDataTS$weighted.mean)
+#' 
+#' # read info. on sample spatial grouping
+#' data(fieldDataCluster)
 #' 
 #' # derive validation results
-#' cropVal <- phenoCropVal(ev, fieldData$crop)
+#' cropVal <- phenoCropVal(fieldDataTS, fieldData$crop, fieldDataCluster$region.id)
 #' 
 #' # plot accuracy results
 #' cropVal$accuracy.plot
@@ -51,9 +55,9 @@
 
 phenoCropVal <- function(x, y, z) {
   
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 1. Check variables
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  # 1. Check variables
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   if (class(x)[1] != "data.frame") {stop('"x" is not a data.frame')}
   
@@ -63,26 +67,22 @@ phenoCropVal <- function(x, y, z) {
   unique.y <- unique(y)
   
   if (missing("z")) {
-    warning('"z" is missing (each entry in "x" will be validated separately')
+    warning('"z" is missing (each entry in "x" will be validated separately)')
     z <- 1:length(y)
   } else {if (length(y) != length(z)) {stop('"y" and "z" have different lenghts')}}
   
   i0 <- 1:nrow(x)
   
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 2. Valiate samples and estimate class accuracy
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  # 2. Valiate samples and estimate class accuracy
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  
   sample.val <- vector("logical", nrow(x)) # sample-wise validation
-  class.acc <- data.frame(class=unique.y, f1=0, stringsAsFactors=FALSE) # class-wise validation
+  class.sum <- sample.sum <- sample.true <- vector("numeric", length(unique.y))
   
   for (c in 1:length(unique.y)) {
     
     unique.z <- unique(z[which(y == unique.y[c])]) # indices of target samples
-    
-    pp <- 0
-    cp <- 0
-    ss <- 0
     
     for (k in 1:length(unique.z)) {
       
@@ -95,31 +95,38 @@ phenoCropVal <- function(x, y, z) {
       reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
       reference.class <- tmp$labels
       
-      # validate results
-      sample.val[vi] <- y[vi] == reference.class[sapply(1:length(vi), function(j) {which.max(phenoCropClass(as.numeric(x[vi[j],]), reference.ts, 1)$r2)})]
+      # classification
+      sample.class <- reference.class[sapply(1:length(vi), function(j) {which.max(phenoCropClass(as.numeric(x[vi[j],]), reference.ts, 1)$r2)})]
       
-      pp <- pp + sum(sample.val[vi]) # count class occurrences
-      cp <- cp + sum(sample.val[vi] & y[vi]==unique.y[c]) # count correct occurrences
-      ss <- ss + length(vi) # number of validation samples
+      # validate results
+      sample.val[vi] <- y[vi] == sample.class
+      
+      
+      sample.true[c] <- sample.true[c] + sum(sample.val[vi] & y[vi]==unique.y[c]) # count class occurrences
+      class.sum <- class.sum + sapply(unique.y, function(u) {sum(sample.class == u)}) # count of class occurrence
+      sample.sum[c] <- sample.sum[c] + length(vi) # number of validation samples
       
     }
     
-    # estimate F1-score
-    p <- cp / pp
-    r <- cp / ss
-    class.acc$f1[c] <- 2 * ((p * r) / (p + r))
-    
   }
   
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 3. Build accuracy plot
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  # 3. Derive accuracies
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  
+  p <- sample.true / sample.sum
+  r <- sample.true / class.sum
+  class.acc <- data.frame(class=unique.y, count=sample.sum, precision=p, recall=r, f1=(2 * ((p * r) / (p + r))), stringsAsFactors=FALSE)
+  
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  # 4. Build accuracy plot
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   p <- ggplot(class.acc, aes_string(x="class", y="f1")) + geom_bar(stat="identity")
   
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 3. Derive output
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
+  # 5. Derive output
+  #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   return(list(sample.validation=sample.val, class.accuracy=class.acc, accuracy.plot=p))
   

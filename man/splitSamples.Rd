@@ -40,7 +40,6 @@ r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
 
 # read field data
 data(fieldData)
-fieldData <- fieldData[1:3,]
 
 # find polygon clusters
 k <- splitSamples(fieldData, r, fieldData$crop, agg.radius=30)

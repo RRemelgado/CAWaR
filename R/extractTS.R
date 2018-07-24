@@ -27,14 +27,14 @@
 #' # read field data
 #' data(fieldData)
 #' 
-#' # derive time series
-#' ev <- extractTS(fieldData[1,], r)
+#' # read time series
+#' data(fieldDataTS)
 #' 
 #' # see information on selected pixels
-#' head(ev$pixel.info)
+#' head(fieldDataTS$pixel.info)
 #' 
 #' # plot profile
-#' plot(ev$weighted.mean[1,], type="l")
+#' plot(fieldDataTS$weighted.mean[1,], type="l")
 #' 
 #' }
 #' @export

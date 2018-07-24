@@ -26,7 +26,7 @@ unique class in \emph{y} and uses them to classify the validation samples using 
 final output consists of:
 \itemize{
  \item{\emph{sample.validation} - A \emph{logical} vector with the same length of \emph{x} where TRUE means it was correctly classied.}
- \item{\emph{class.accuracy} - A \emph{data.frame} with an F1-score for each unique class in \emph{y}.}}}
+ \item{\emph{class.accuracy} - A \emph{data.frame} with sample count per class, precision, recall and F1-scores per unique class in \emph{y}.}}}
 }
 \examples{
 {
@@ -43,11 +43,15 @@ data(fieldData)
 # read reference profiles
 data(referenceProfiles)
 
-# derive time series
-ev <- as.data.frame(extractTS(fieldData, extend(r, 60))$weighted.mean)
+# read time series
+data(fieldDataTS)
+fieldDataTS <- as.data.frame(fieldDataTS$weighted.mean)
+
+# read info. on sample spatial grouping
+data(fieldDataCluster)
 
 # derive validation results
-cropVal <- phenoCropVal(ev, fieldData$crop)
+cropVal <- phenoCropVal(fieldDataTS, fieldData$crop, fieldDataCluster$region.id)
 
 # plot accuracy results
 cropVal$accuracy.plot

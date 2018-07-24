@@ -38,11 +38,9 @@ r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
 
 # read field data
 data(fieldData)
+data(fieldDataTS)
 
-# derive time series
-ev <- extractTS(fieldData[3,], extend(r, 60))
-
-a.ts <- analyzeTS(as.data.frame(ev$weighted.mean), "test")
+a.ts <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
 
 }
 }
