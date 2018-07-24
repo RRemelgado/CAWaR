@@ -4,27 +4,38 @@
 \alias{checkSamples}
 \title{checkSamples}
 \usage{
-checkSamples(samples = samples)
+checkSamples(x)
 }
 \arguments{
-\item{samples}{Vector of class \emph{character}.}
+\item{x}{An object or a list of class \emph{sp} containing a \emph{data.frame} (e.g. \emph{SpatialPolygonsDataFrame}).}
 }
 \value{
-A \emph{data.frame} with the consistency checks for each element in \emph{samples}.
+A \emph{data.frame} with the consistency checks for each element in \emph{x}.
 }
 \description{
-checks if a shapefile
+checks if a shapefile with ground truth data contains all the necessary fields in the correct format.
 }
 \details{
-{Checks if a shapefile - or a set of - contains necessary columns and if these have the right format. It searches for:
+{Checks if a shapefile - or a list of - contains necessary columns and if these have the right format. It searches for:
 \itemize{
  \item{\emph{sampler} - Character vector with name of responsible person.}
  \item{\emph{date} - Date vector with the date on which each sample was collected (formated as "yyyy-mm-dd").}
  \item{\emph{label} - Character vector sample label (e.g. land cover class).}}}
 }
 \examples{
-{}
+{
+
+require(fieldRS)
+
+# Example ground-truth data
+data(fieldData)
+
+# check shapefile content
+cs <- checkSamples(fieldData)
+head(cs)
+
+}
 }
 \seealso{
-\code{\link{labelCheck}}
+\code{\link[fieldRS]{labelCheck}}
 }

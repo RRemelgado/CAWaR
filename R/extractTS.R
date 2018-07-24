@@ -4,7 +4,7 @@
 #' @param x Object of class \emph{SpatialPolygons} or \emph{SpatialPolygonsDataFrame}.
 #' @param y A \emph{raster} object or a numeric element.
 #' @return A \emph{list}.
-#' @importFrom raster crs weighted.mean
+#' @importFrom raster crs raster extent weighted.mean
 #' @importFrom rsMove poly2sample
 #' @importFrom stats sd
 #' @details {For each polygon in \emph{x}, the function identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the
@@ -19,6 +19,7 @@
 #' @examples {
 #' 
 #' require(raster)
+#' require(fieldRS)
 #' 
 #' # read raster data
 #' r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
@@ -76,7 +77,7 @@ extractTS <- function(x, y) {
     ind <- which(out.df$id == i)
     if (ev) {v <- apply(extract(y, out.df[ind,2:3]), 2, function(j) {weighted.mean(j, out.df$cov[ind], na.rm=TRUE)})} else {v <- NULL}
     odf <- data.frame(id=i, x=mean(out.df$x[ind]), y=mean(out.df$y[ind]), min.cover=min(out.df$cov[ind]), 
-                      max.cover=max(out.df$cov[ind]), mean.cover=mean(out.df$cov[ind]))
+                      max.cover=max(out.df$cov[ind]), mean.cover=mean(out.df$cov[ind]), count=length(ind))
     return(list(val=v, info=odf))})
   
   # return list

@@ -8,7 +8,19 @@
 #' @return A \emph{list} with selected indices for \emph{x} and \emph{y}. 
 #' @details {Uses Dynamic Time Wrapping (DTW) to match \emph{x} and \emph{y}. \emph{z} determines 
 #' the buffer size - expressed in number of data points - used to search for matching records.}
-#' @examples {}
+#' @examples {
+#' 
+#' x <- c(2200, 4500, 4600, 6400, 1600) # target
+#' y <- c(1100, 1150, 1200, 6400, 1600) # reference
+#' 
+#' i <- matchIndices(x, y, 1) # find best match
+#' 
+#' # plot x (blue), and selected y (red)
+#' plot(1:5, replicate(5,0), ylim=c(0,10000), type="l") 
+#' lines(i$x, x[i$x], type="l", col="blue")
+#' lines(i$y, y[i$y], type="l", col="red")
+#' 
+#' }
 #' @export
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
@@ -51,18 +63,18 @@ matchIndices <- function(x, y, z) {
   cv <- vector("logical", length(x))
   oi <- vector("numeric", length(y))
   
-  for (i in 1:length(y)) {
+  for (j in 1:length(y)) {
     
-    i <- which(d[i,] == min(d[i,!cv], na.rm=TRUE))[1]
+    i <- which(d[j,] == min(d[j,!cv], na.rm=TRUE) & !cv)[1]
     
     if (length(i) > 0) {
       
-      oi[i] <- i
-      cv[oi[i]] <- TRUE
+      oi[j] <- i
+      cv[oi[j]] <- TRUE
       
     } else {
       
-      oi[i] <- NA
+      oi[j] <- NA
       
     }
     

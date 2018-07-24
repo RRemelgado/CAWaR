@@ -6,32 +6,37 @@
 #' @param z A vector.
 #' @param agg.radius Numeric element.
 #' @return A list.
-#' @importFrom raster crs rasterize which.max rowFromCell colFromCell extract
+#' @importFrom raster res crs rasterize which.max rowFromCell colFromCell extract cellStats
 #' @importFrom rsMove checkOverlap
+#' @importFrom fieldRS spCentroid ccLabel
 #' @details {For each class in \emph{z}, the function converts the elements in \emph{x} into a raster layer using \emph{y} as a basis. Then, 
 #' it aggregates all pixels that are within a given distance of each other - defined by \emph{agg.radius} using \code{\link{ccLabel}}. The 
 #' output is a list consisting of:
 #' \itemize{
 #'  \item{\emph{region.id} - Class dependent region label for each element in \emph{x}.}
 #'  \item{\emph{region.frequency} - Pixel count for each unique value in \emph{region.id}.}}}
-#' @seealso \code{\link{assignClass}} \code{\link{classModel}}
+#' @seealso \code{\link{phenoCropVal}} \code{\link{phenoCropClass}}
 #' @examples {
 #' 
 #' require(raster)
+#' require(fieldRS)
 #' 
 #' # read raster data
 #' r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
 #' 
 #' # read field data
-#' data(fielData)
+#' data(fieldData)
+#' fieldData <- fieldData[1:3,]
 #' 
-#' agg.label <- splitSamples(fieldData[1,], r, fieldData$crop[1], agg.radius=30)
+#' # find polygon clusters
+#' k <- splitSamples(fieldData, r, fieldData$crop, agg.radius=30)
+#' fieldData$ID <- as.factor(k$region.id)
 #' 
-#' # show labels
-#' agg.label$region.id
+#' # plot regions with labels
+#' spplot(fieldData["ID"])
 #' 
-#' # show region pixel count
-#' agg.label$region.frequency
+#' # show pixel count per region
+#' head(k$region.frequency)
 #' 
 #' }
 #' @export
@@ -74,7 +79,7 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
     ri <- which(z == unique.z[c]) # target samples for class
     regions <- rasterize(x[ri,], y, field=1, background=0) # sample mask
     ci <- which.max(regions) # target cells
-    regions[] <- 0 # remove values
+    regions[] <- NA # remove values
     
     # dilate image samples
     for (p in 1:length(ci)) {
@@ -92,6 +97,7 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
     urv <- unique(regions)
     urv <- urv[urv > 0]
     region.freq[[c]] <- data.frame(id=urv, count=sapply(urv, function(r) {cellStats(regions==r, sum)}))
+    region.freq[[c]]$id <- paste0(unique.z[c], "_", sprintf("%003d", region.freq[[c]]$id))
     
   }
   
