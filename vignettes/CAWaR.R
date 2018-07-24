@@ -66,7 +66,7 @@ kable_styling(kable(head(sampleCorrect$label.count, 3), format="html", align="c"
 sampleCorrect$label.count.plot
 
 ## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
-include_graphics("percentCover.png")
+include_graphics("percentCover.jpg")
 
 ## ----eval=FALSE, message=FALSE-------------------------------------------
 #  fieldDataTS <- extractTS(fieldData, ndvi.ts)
@@ -113,7 +113,6 @@ cropVal$accuracy.plot
 ## ----eval=FALSE----------------------------------------------------------
 #  fieldData$validation <- as.factor(cropVal$sample.validation)
 #  spplot(fieldData["validation"])
-#  
 
 ## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
 fieldData$validation <- as.factor(cropVal$sample.validation)

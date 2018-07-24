@@ -24,7 +24,6 @@ library(raster)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
-library(RStoolbox)
 library(CAWaR)
 ```
 
@@ -172,7 +171,7 @@ The crop classification algorithm built in the scope of the CAWa project disting
 </br>
 
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}
-include_graphics("percentCover.png")
+include_graphics("percentCover.jpg")
 ```
 <p lign="center">Example figure showing the change in the percent overlap between a polygon and a reference raster grid.</p>
 
@@ -277,9 +276,3 @@ spplot(fieldData["validation"])
 ```
 
 </br>
-
-### PhenoCropClass: Phenology driven crop type mapping.
-<p align="justify" style="line-height:200%;">
-
-</p>
-
