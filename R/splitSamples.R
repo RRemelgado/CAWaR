@@ -66,6 +66,7 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
   if (!is.numeric(agg.radius)) {stop('"agg.radius" is not a numeric element')}
   if (length(agg.radius) > 1) {stop('"agg.radius" has more than 1 element')}
   agg.radius <- round(agg.radius/res(y)[1]) # number of pixels
+  if (agg.radius == (round(33 / 2)*2)) {agg.radius <- agg.radius + 1}
   
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   # 2. derive region indices
@@ -78,7 +79,7 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
     
     ri <- which(z == unique.z[c]) # target samples for class
     regions <- rasterize(x[ri,], crop(y[[1]],x[ri,]), field=1, background=NA) # sample mask
-    regions <- focal(regions, matrix(0,agg.radius, agg.radius), function(j) {sum(!is.na(j))}) > 0 # dilate
+    regions <- focal(regions, matrix(0,agg.radius, agg.radius), function(j) {sum(!is.na(j))}, pad=TRUE, padValue=NA) > 0 # dilate
     
     # label regions
     regions <- ccLabel(regions)$regions

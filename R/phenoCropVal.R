@@ -84,27 +84,31 @@ phenoCropVal <- function(x, y, z) {
     
     unique.z <- unique(z[which(y == unique.y[c])]) # indices of target samples
     
-    for (k in 1:length(unique.z)) {
+    if (length(unique.z) > 1) {
       
-      # determine validation/training indices
-      vi <- which(z == unique.z[k] & y == unique.y[c])
-      ti <- i0[!i0 %in% vi]
-      
-      # build reference profiles
-      tmp <- analyzeTS(x[ti,], y[ti])
-      reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
-      reference.class <- tmp$labels
-      
-      # classification
-      sample.class <- reference.class[sapply(1:length(vi), function(j) {which.max(phenoCropClass(as.numeric(x[vi[j],]), reference.ts, 1)$r2)})]
-      
-      # validate results
-      sample.val[vi] <- y[vi] == sample.class
-      
-      
-      sample.true[c] <- sample.true[c] + sum(sample.val[vi] & y[vi]==unique.y[c]) # count class occurrences
-      class.sum <- class.sum + sapply(unique.y, function(u) {sum(sample.class == u)}) # count of class occurrence
-      sample.sum[c] <- sample.sum[c] + length(vi) # number of validation samples
+      for (k in 1:length(unique.z)) {
+        
+        # determine validation/training indices
+        vi <- which(z == unique.z[k] & y == unique.y[c])
+        ti <- i0[!i0 %in% vi]
+        
+        # build reference profiles
+        tmp <- analyzeTS(x[ti,], y[ti])
+        reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
+        reference.class <- tmp$labels
+        
+        # classification
+        sample.class <- reference.class[sapply(1:length(vi), function(j) {which.max(phenoCropClass(as.numeric(x[vi[j],]), reference.ts, 1)$r2)})]
+        
+        # validate results
+        sample.val[vi] <- y[vi] == sample.class
+        
+        
+        sample.true[c] <- sample.true[c] + sum(sample.val[vi] & y[vi]==unique.y[c]) # count class occurrences
+        class.sum <- class.sum + sapply(unique.y, function(u) {sum(sample.class == u)}) # count of class occurrence
+        sample.sum[c] <- sample.sum[c] + length(vi) # number of validation samples
+        
+      }
       
     }
     
