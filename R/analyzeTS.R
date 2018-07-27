@@ -1,6 +1,6 @@
 #' @title analyzeTS
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
+#' @description Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialPolygons} object.
 #' @param x Object of class \emph{data.frame}.
 #' @param y Vector of class \emph{character} or \emph{numeric} with a length equal to the number of rows in \emph{x}.
 #' @return A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampeled pixels.

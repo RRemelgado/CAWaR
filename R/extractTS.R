@@ -1,6 +1,6 @@
 #' @title extractTS
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialPolygons} object.
+#' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
 #' @param x Object of class \emph{SpatialPolygons} or \emph{SpatialPolygonsDataFrame}.
 #' @param y A \emph{raster} object or a numeric element.
 #' @return A \emph{list}.

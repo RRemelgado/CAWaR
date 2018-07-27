@@ -77,15 +77,8 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
   for (c in 1:length(unique.z)) {
     
     ri <- which(z == unique.z[c]) # target samples for class
-    regions <- rasterize(x[ri,], y, field=1, background=0) # sample mask
-    ci <- which.max(regions) # target cells
-    regions[] <- NA # remove values
-    
-    # dilate image samples
-    for (p in 1:length(ci)) {
-      rp <- rowFromCell(y, ci[p])
-      cp <- colFromCell(y, ci[p])
-      regions[(rp-agg.radius):(rp+agg.radius),(cp-agg.radius):(cp+agg.radius)]<- 1}
+    regions <- rasterize(x[ri,], crop(y[[1]],x[ri,]), field=1, background=NA) # sample mask
+    regions <- focal(regions, matrix(0,agg.radius, agg.radius), function(j) {sum(!is.na(j))}) > 0 # dilate
     
     # label regions
     regions <- ccLabel(regions)$regions
