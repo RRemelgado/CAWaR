@@ -10,10 +10,13 @@
 #' @importFrom ggplot2 ggplot aes_string geom_bar
 #' @details {For each unique class in \emph{y}, the function iterates through each unique element in \emph{z} 
 #' and keeps it for validation. Then, it calls \code{\link{analyzeTS}} to derive reference profiles for each 
-#' unique class in \emph{y} and uses them to classify the validation samples using \code{\link{phenoCropClass}}. The 
-#' final output consists of:
+#' unique class in \emph{y} and uses them to classify the validation samples using \code{\link{phenoCropClass}}. 
+#' The final output consists of:
 #' \itemize{
 #'  \item{\emph{sample.validation} - A \emph{logical} vector with the same length of \emph{x} where TRUE means it was correctly classied.}
+#'  \item{\emph{predicted.class} - A \emph{chracter} cector with the predicted classes for each sample.}
+#'  \item{\emph{sample.count} - A \emph{numeric} vector with the number of non-NA used for validation per sample.}
+#'  \item{\emph{sample.r2} - A \emph{numeric} vector with the r2 value between the target sample and the selected class profile.}
 #'  \item{\emph{class.accuracy} - A \emph{data.frame} with sample count per class, precision, recall and F1-scores per unique class in \emph{y}.}}}
 #' @seealso \code{\link{extractTS}} \code{\link{phenoCropClass}}
 #' @examples {
@@ -78,7 +81,10 @@ phenoCropVal <- function(x, y, z) {
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   sample.val <- vector("logical", nrow(x)) # sample-wise validation
+  sample.class <- vector("character", nrow(x))
   class.sum <- sample.sum <- sample.true <- vector("numeric", length(unique.y))
+  sample.count <- vector("numeric", nrow(x))
+  sample.r2 <- vector("numeric", nrow(x))
   
   for (c in 1:length(unique.y)) {
     
@@ -98,14 +104,22 @@ phenoCropVal <- function(x, y, z) {
         reference.class <- tmp$labels
         
         # classification
-        sample.class <- reference.class[sapply(1:length(vi), function(j) {which.max(phenoCropClass(as.numeric(x[vi[j],]), reference.ts, 1)$r2)})]
+        cropClass <- do.call(rbind, lapply(1:length(vi), function(j) {
+          pc <- phenoCropClass(as.numeric(x[vi[j],]), reference.ts)
+          i <- which.max(pc$r2)
+          pc <- pc[i,]
+          pc$id <- i
+          return(pc)}))
+          
+        sample.class[vi] <- reference.class[cropClass$id]
+        sample.count[vi] <- cropClass$count
+        sample.r2[vi] <- cropClass$r2
         
         # validate results
-        sample.val[vi] <- y[vi] == sample.class
-        
+        sample.val[vi] <- y[vi] == sample.class[vi]
         
         sample.true[c] <- sample.true[c] + sum(sample.val[vi] & y[vi]==unique.y[c]) # count class occurrences
-        class.sum <- class.sum + sapply(unique.y, function(u) {sum(sample.class == u)}) # count of class occurrence
+        class.sum <- class.sum + sapply(unique.y, function(u) {sum(sample.class[vi] == u)}) # count of class occurrence
         sample.sum[c] <- sample.sum[c] + length(vi) # number of validation samples
         
       }
@@ -132,6 +146,7 @@ phenoCropVal <- function(x, y, z) {
   # 5. Derive output
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
-  return(list(sample.validation=sample.val, class.accuracy=class.acc, accuracy.plot=p))
+  return(list(sample.validation=sample.val, predicted.class=sample.class, sample.ts.count=sample.count, 
+              sample.r2=sample.r2, class.accuracy=class.acc, accuracy.plot=p))
   
 }

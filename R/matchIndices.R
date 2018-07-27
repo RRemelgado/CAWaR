@@ -65,18 +65,25 @@ matchIndices <- function(x, y, z) {
   
   for (j in 1:length(y)) {
     
-    i <- which(d[j,] == min(d[j,!cv], na.rm=TRUE) & !cv)[1]
+    if (!is.na(y[j])) {
+      
+      i <- which(d[j,!cv[(j-z):(j+z)]] == min(d[j,!cv[(j-z):(j+z)]], na.rm=TRUE) & !cv)[1]
+      
+      if (length(i) > 0) {
+        
+        oi[j] <- i
+        cv[oi[j]] <- TRUE
+        
+      } else {
+        
+        oi[j] <- NA
+        
+      }
+      
+      
+    } else {oi[j] <- NA}
     
-    if (length(i) > 0) {
-      
-      oi[j] <- i
-      cv[oi[j]] <- TRUE
-      
-    } else {
-      
-      oi[j] <- NA
-      
-    }
+
     
   }
   
@@ -85,6 +92,6 @@ matchIndices <- function(x, y, z) {
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   i <- which(!is.na(oi))
-  return(list(x=i, y=oi[i]))
+  return(list(x=oi[i], y=i))
   
 }

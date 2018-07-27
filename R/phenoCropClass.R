@@ -7,9 +7,9 @@
 #' @return A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.
 #' @importFrom stats cor
 #' @details {Correlates \emph{x} with each row in \emph{y} using Dynamic Time Wraping (DTW) to match 
-#' the time-series. \emph{z} sets the temporal buffer used to search to matching data points. The row 
-#' in \emph{y} with the highest correlation is reported as the selected class. The final output is a 
-#' \emph{data.frame} containing:
+#' the time-series. \emph{z} sets the temporal buffer used to search to matching data points. If 
+#' \emph{match} is set to FALSE the DTW analysis will be skipped. The row in \emph{y} with the highest 
+#' correlation is reported as the selected class. The final output is a \emph{data.frame} containing:
 #' \itemize{
 #'  \item{\emph{r2} - \eqn{R^{2}} between \emph{x} and each row \emph{y}.}
 #'  \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}}}
@@ -35,7 +35,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-phenoCropClass <- function(x, y, z) {
+phenoCropClass <- function(x, y, z, match=FALSE) {
   
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   # 1. Check variables
@@ -53,13 +53,15 @@ phenoCropClass <- function(x, y, z) {
   # correlate x with reference profiles in y
   odf <- do.call(rbind, lapply(1:nrow(y), function(j) {
     
-    i <- matchIndices(as.numeric(x), as.numeric(y[j,]), z)
+    if (match) {
+      i <- matchIndices(as.numeric(x), as.numeric(y[j,]), z)
+      i <- which(!is.na(x[i$x]) & !is.na(y[j,i$y]))
+    } else {i <- which(!is.na(x) & !is.na(y[j,]))}
     
     if (length(i) > 0) {
       
-      r <- cor(as.numeric(x[i$x]), as.numeric(y[j,i$y]))^2
-      i <- length(i$x)
-      return(data.frame(r2=r, count=i))
+      r <- cor(as.numeric(x[i]), as.numeric(y[j,i]))^2
+      return(data.frame(r2=r, count=length(i)))
       
     } else {return(data.frame(r2=NA, count=NA))}}))
   
