@@ -98,22 +98,33 @@ phenoCropVal <- function(x, y, z) {
         vi <- which(z == unique.z[k] & y == unique.y[c])
         ti <- i0[!i0 %in% vi]
         
-        # build reference profiles
-        tmp <- analyzeTS(x[ti,], y[ti])
-        reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
-        reference.class <- tmp$labels
-        
-        # classification
         cropClass <- do.call(rbind, lapply(1:length(vi), function(j) {
-          pc <- phenoCropClass(as.numeric(x[vi[j],]), reference.ts)
-          i <- which.max(pc$r2)
+          pc <- phenoCropClass(as.numeric(x[vi[j],]), x[ti,])
+          i <- which.max(pc$r2)[1]
           pc <- pc[i,]
-          pc$id <- i
+          pc$class <- y[ti[i]]
           return(pc)}))
-          
-        sample.class[vi] <- reference.class[cropClass$id]
+        
+        sample.class[vi] <- cropClass$class
         sample.count[vi] <- cropClass$count
         sample.r2[vi] <- cropClass$r2
+        
+        # build reference profiles
+        #tmp <- analyzeTS(x[ti,], y[ti])
+        #reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
+        #reference.class <- tmp$labels
+        
+        # classification
+        #cropClass <- do.call(rbind, lapply(1:length(vi), function(j) {
+          # pc <- phenoCropClass(as.numeric(x[vi[j],]), reference.ts, match=TRUE)
+          # i <- which.max(pc$r2)
+          # pc <- pc[i,]
+          # pc$id <- i
+          # return(pc)}))
+          
+        #sample.class[vi] <- reference.class[cropClass$id]
+        #sample.count[vi] <- cropClass$count
+        #sample.r2[vi] <- cropClass$r2
         
         # validate results
         sample.val[vi] <- y[vi] == sample.class[vi]

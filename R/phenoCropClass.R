@@ -60,7 +60,7 @@ phenoCropClass <- function(x, y, z, match=FALSE) {
     
     if (length(i) > 0) {
       
-      r <- cor(as.numeric(x[i]), as.numeric(y[j,i]))^2
+      r <- cor(as.numeric(x[i]), as.numeric(y[j,i]), method="kendall")
       return(data.frame(r2=r, count=length(i)))
       
     } else {return(data.frame(r2=NA, count=NA))}}))

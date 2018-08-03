@@ -60,30 +60,44 @@ matchIndices <- function(x, y, z) {
 # 3. Find shortest path between x and y
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
-  cv <- vector("logical", length(x))
   oi <- vector("numeric", length(y))
+  cv <- vector("logical", length(y))
   
   for (j in 1:length(y)) {
     
     if (!is.na(y[j])) {
       
-      i <- which(d[j,!cv[(j-z):(j+z)]] == min(d[j,!cv[(j-z):(j+z)]], na.rm=TRUE) & !cv)[1]
+      if (j > z) {sp <- j-z} else {sp <- 1}
+      if (j < length(y)-z) {ep <- j+z} else {ep <- length(y)}
+      
+      i <- c(sp:ep)[!is.na(x[sp:ep]) & !cv[sp:ep]]
       
       if (length(i) > 0) {
         
-        oi[j] <- i
-        cv[oi[j]] <- TRUE
+        i <- i[order(d[j,i])[1]]
         
+        if (length(i) > 0) {
+          
+          oi[j] <- i
+          cv[1:oi[j]] <- TRUE
+        
+        } else {
+          
+          oi[j] <- NA
+          
+        }
+          
       } else {
-        
+          
         oi[j] <- NA
-        
+      
       }
       
+    } else {
       
-    } else {oi[j] <- NA}
+      oi[j] <- NA
     
-
+    }
     
   }
   
