@@ -210,7 +210,7 @@ Additionally, the function will correlate the profile of every sample with the m
 </p>
 
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}
-kable_styling(kable(head(checkTS$r2, 5), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+kable_styling(kable(head(checkTS$r2, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
 ```
 
 <p align="justify" style="line-height:200%;">
@@ -257,7 +257,7 @@ Now we can use `phenoCropVal()` to check the accuracy of our predicitons. The fu
 cropVal <- phenoCropVal(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2, fieldDataCluster$region.id)
 ```
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}
-kable_styling(kable(head(cropVal$class.accuracy, 5), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+kable_styling(kable(head(cropVal$class.accuracy, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
 cropVal$accuracy.plot
 ```
 
@@ -276,3 +276,6 @@ spplot(fieldData["validation"])
 ```
 
 </br>
+
+
+

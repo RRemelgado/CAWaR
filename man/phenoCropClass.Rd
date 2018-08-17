@@ -4,7 +4,7 @@
 \alias{phenoCropClass}
 \title{phenoCropClass}
 \usage{
-phenoCropClass(x, y, z)
+phenoCropClass(x, y, z, match = FALSE)
 }
 \arguments{
 \item{x}{A \emph{matrix} or \emph{data.frame}.}
@@ -12,6 +12,8 @@ phenoCropClass(x, y, z)
 \item{y}{A \emph{character} vector.}
 
 \item{z}{A \emph{numeric} element. Default is 1.}
+
+\item{match}{logical argument.}
 }
 \value{
 A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.
@@ -20,10 +22,10 @@ A \emph{list} containing a set of reference profiles for each unique class in \e
 Spatialy explicit and phenology driven classification scheme for cropland mapping.
 }
 \details{
-{Correlates \emph{x} with each row in \emph{y} using Dynamic Time Wraping (DTW) to match 
-the time-series. \emph{z} sets the temporal buffer used to search to matching data points. The row 
-in \emph{y} with the highest correlation is reported as the selected class. The final output is a 
-\emph{data.frame} containing:
+{Correlates \emph{x} with each row in \emph{y}. The row in \emph{y} with the highest 
+correlation is reported as the selected class. If \emph{match} is set to TRUE the function will 
+use Dynamic Time Wraping (DTW) \emph{x} and \emph{y} at each iteration. \emph{z} sets the temporal 
+buffer used to search to matching data points. The final output is a \emph{data.frame} containing:
 \itemize{
  \item{\emph{r2} - \eqn{R^{2}} between \emph{x} and each row \emph{y}.}
  \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}}}

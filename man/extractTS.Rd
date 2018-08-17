@@ -15,7 +15,7 @@ extractTS(x, y)
 A \emph{list}.
 }
 \description{
-Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialPolygons} object.
+Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
 }
 \details{
 {For each polygon in \emph{x}, the function identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the

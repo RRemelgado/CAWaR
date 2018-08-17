@@ -2,19 +2,18 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Matches two vectors with different lenghts based on their maximum value.
 #' @param x Target numeric \emph{vector}.
-#' @param y Reference numeric \emph{vector}.
-#' @param z A \emph{numeric} element.
 #' @importFrom raster which.max
 #' @return A \emph{list} with selected indices for \emph{x} and \emph{y}. 
 #' @details {Uses Dynamic Time Wrapping (DTW) to match \emph{x} and \emph{y}. \emph{z} determines 
-#' the buffer size - expressed in number of data points - used to search for matching records.}
+#' the buffer size - expressed in number of data points - used to search for matching records. For 
+#' optimal performance, we recommend that \emph{x} is smoothed a priori.}
 #' @examples {
 #' 
 #' x <- c(293, 770, 1166, 1166, 1562, 2357, 3234, 
 #' 5806, 5806, 5678, 5678, 5546, 5536, 5536, 5536, 
 #' 5325, 5200, 4726, 3550, 2868, 2365, 2365, 2365)
 #' 
-#' n <- ountCropCycles(x)
+#' n <- countCropCycles(x)
 #' 
 #' }
 #' @export

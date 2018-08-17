@@ -1,6 +1,6 @@
 #' CAWaR.
 #'
-#' @name fieldRS
+#' @name CAWaR
 #' @docType package
 #' @import raster sp
 NULL

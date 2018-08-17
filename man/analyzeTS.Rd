@@ -15,7 +15,7 @@ analyzeTS(x, y)
 A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampeled pixels.
 }
 \description{
-Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
+Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialPolygons} object.
 }
 \details{
 {For each unique value in \emph{y}, the function will select the rows in \emph{x} that correspond to it and estimate the

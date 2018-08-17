@@ -4,14 +4,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----echo=FALSE, message=FALSE-------------------------------------------
+## ----echo=FALSE, message=FALSE, warning=FALSE----------------------------
 # load packages
 library(fieldRS)
 library(raster)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
-library(RStoolbox)
 library(CAWaR)
 
 ## ----message=FALSE-------------------------------------------------------
@@ -84,7 +83,7 @@ checkTS <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2)
 checkTS$plots
 
 ## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
-kable_styling(kable(head(checkTS$r2, 5), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+kable_styling(kable(head(checkTS$r2, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  checkTS <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), 1:length(fieldData))
@@ -107,7 +106,7 @@ kable_styling(kable(head(fieldDataCluster$region.frequency, 5), format="html", a
 cropVal <- phenoCropVal(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2, fieldDataCluster$region.id)
 
 ## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
-kable_styling(kable(head(cropVal$class.accuracy, 5), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+kable_styling(kable(head(cropVal$class.accuracy, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
 cropVal$accuracy.plot
 
 ## ----eval=FALSE----------------------------------------------------------

@@ -1,7 +1,7 @@
 #' @title meStack
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Stacking of raster layers with different extents
-#' @param x A \emph{list} of \emph{RasterLayers}.
+#' @param x A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.
 #' @param y A spatial object from which an extent can be derived.
 #' @param z Object of class \emph{Date} with the acquisition date for each element in \emph{x}.
 #' @param mask Object of class \emph{RasterLayer} with the same extent as \emph{y}.
@@ -10,6 +10,7 @@
 #' @return A list containing a \emph{RasterStack} and related statistics.
 #' @importFrom stats cor sd
 #' @importFrom ggplot2 ggplot aes_string geom_ribbon geom_line
+#' @importFrom lubridate is.Date
 #' @details {The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops it by the
 #' extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new pixels are set to NA. If
 #' \emph{z} is provided, the function will then aggregate all bands acquired in the same date \emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
@@ -24,10 +25,12 @@
 #' 
 #' require(raster)
 #' 
-#' r1 <- raster(xmn=1, xmx=90, ymn=1, ymx=90, res=30)
-#' r2 <- raster(xmn=50, xmx=150, ymn=50, ymx=150, res=30)
+#' r1 <- raster(xmn=1, xmx=90, ymn=1, ymx=90, res=1, vals=1) # image 1
+#' r2 <- raster(xmn=50, xmx=150, ymn=50, ymx=150, res=1, vals=1) # image 2
+#' r0 <- raster(xmn=20, xmx=90, ymn=50, ymx=90, res=1, vals=1) # target extent
 #' 
-#' meStack(list(r1, r2), )
+#' mes <- meStack(list(r1, r2), r0)
+#' plot(mes$stack)
 #' 
 #' }
 #' @export
@@ -41,12 +44,21 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
 # 1. Check input variables
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  if (!is.character(x)) {stop('"x" is not a character vector')}
-
+  if (!class(x)[1] %in% c("character", "list")) {stop('"x" is not of a valid class')}
+  if (length(x) == 1) {stop('"x" only has 1 element')}
+  
+  if (is.character(x)) {
+    lapply(x, function(i) {
+      r <- file.exists(i)
+      if (r) {
+        r <- try(raster(r), silent=TRUE)
+        if (class(e)[1] != 'try-error') {return(r)} else {return(NULL)}
+      } else {return(NULL)}})}
+  
   e <- try(extent(y), silent=TRUE)
   if (class(e)[1] == 'try-error') {stop('"y" is not a valid spatial object')}
 
-  if (exists("z")) {
+  if (!missing("z")) {
     if (!is.Date(z)) {stop('"z" is not a "Date" vector')}
     if (length(x) != length(z)) {stop('"x" and "z" have different lenghts')}
     tinfo <- TRUE
@@ -63,24 +75,21 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
 
   tmp <- lapply(1:length(x), function(i) {
 
-    r <- raster(x[i]) # read data
-    o <- checkOverlap(r, y) # check if usable
+    o <- tryCatch(!is.null(intersect(x[[i]], y)), error=function(e) return(FALSE))
     if (o[1] > 0) {
-      r <- extend(crop(r, y), y, value=NA) # crop/extend to extent
-      c <- TRUE # control(used)
-    } else {
-      c <- FALSE
-      image <- NULL
-    } # control(not used)
+      r <- extend(crop(x[[i]], y), y, value=NA) # crop/extend to extent
+    } else {r <- NULL}
 
-    return(list(control=c, image=r, date=z[i]))
+    return(list(image=r, date=z[i]))
 
   })
 
-  o.stk <- stack(lapply(tmp, function(i) {i$image})) # output stack
-  c.var <- do.call("c", lapply(tmp, function(i) {i$control})) # control variable (which images where used?)
-  acqd <- do.call("c", lapply(tmp, function(i) {i$date})) # acquistion dates
+  c.var <- sapply(tmp, function(i) {return(!is.null(i$image))}) # control variable (which images where used?)
+  o.stk <- stack(lapply(tmp[c.var], function(i) {i$image})) # output stack
+  acqd <- do.call("c", lapply(tmp[c.var], function(i) {i$date})) # acquistion dates
 
+  rm(tmp)
+  
   # sort stack by time (if "z" is provided)
   if (tinfo) {
 
@@ -123,7 +132,7 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
     odf <- do.call("rbind", lapply(1:nlayers(o.stk), function(i) {sf(o.stk[[i]])}))
     odf$id <- id
 
-    p <- ggplot(mv, aes_string(x="id")) + theme_bw() + geom_ribbon(aes_string(x='id', ymin='min', ymax='max'), fill="grey70") +
+    p <- ggplot(odf, aes_string(x="id")) + theme_bw() + geom_ribbon(aes_string(x='id', ymin='min', ymax='max'), fill="grey70") +
       geom_line(aes_string(y='mean')) + theme_bw() + xlab("\nBand ID") + ylab("Value\n")
 
   } else {
