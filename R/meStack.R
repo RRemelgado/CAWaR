@@ -48,11 +48,11 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
   if (length(x) == 1) {stop('"x" only has 1 element')}
   
   if (is.character(x)) {
-    lapply(x, function(i) {
+    x <- lapply(x, function(i) {
       r <- file.exists(i)
       if (r) {
-        r <- try(raster(r), silent=TRUE)
-        if (class(e)[1] != 'try-error') {return(r)} else {return(NULL)}
+        r <- try(raster(i), silent=TRUE)
+        if (class(r)[1] != 'try-error') {return(r)} else {return(NULL)}
       } else {return(NULL)}})}
   
   e <- try(extent(y), silent=TRUE)

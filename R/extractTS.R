@@ -64,20 +64,33 @@ extractTS <- function(x, y) {
   }
     
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 2. derive weighted mean
+# 2. derive samples
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
   # extract samples per polygon ID
-  out.df <- do.call(rbind, lapply(1:length(x), function(i) {
-    s <- poly2sample(x[i,], y[[1]], min.cover=1)
-    if (is.null(s)) {return(NULL)} else {return(data.frame(id=i, x=s@coords[,1], y=s@coords[,2], cov=s@data$cover))}}))
+  tmp <- lapply(1:length(x), function(i) {
+    shp <- poly2sample(x[i,], y[[1]])
+    return(list(shp=shp, id=replicate(length(shp), i)))})
+  ind <- sapply(tmp, function(i) {return(!is.null(i$shp))})
+  out.df <- do.call(rbind, lapply(tmp[ind], function(i) {i$shp@data}))
+  out.df$id <- do.call("c", lapply(tmp[ind], function(i) {i$id}))
+  out.df <- out.df[which(out.df$cover > 0),]
+  
+  rm(tmp)
+  
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
+# 3. estimate weighted mean
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   # extract raster values (if y is provided)
-  out.val <- lapply(1:length(x), function(i) {
+  if (ev) {ev0 <- as.data.frame(extract(y, out.df[,c("x", "y")]))}
+  
+  out.val <- lapply(unique(out.df$id), function(i) {
     ind <- which(out.df$id == i)
-    if (ev) {v <- apply(extract(y, out.df[ind,2:3]), 2, function(j) {weighted.mean(j, out.df$cov[ind], na.rm=TRUE)})} else {v <- NULL}
-    odf <- data.frame(id=i, x=mean(out.df$x[ind]), y=mean(out.df$y[ind]), min.cover=min(out.df$cov[ind]), 
-                      max.cover=max(out.df$cov[ind]), mean.cover=mean(out.df$cov[ind]), count=length(ind))
+    if (ev) {v <- apply(ev0[ind,], 2, function(j) {weighted.mean(j, out.df$cover[ind], na.rm=TRUE)})} else {v <- NULL}
+    odf <- data.frame(id=i, x=mean(out.df$x[ind]), y=mean(out.df$y[ind]), min.cover=min(out.df$cover[ind]), 
+                      max.cover=max(out.df$cover[ind]), mean.cover=mean(out.df$cover[ind]), 
+                      cover.sd=sd(out.df$cover[ind]), count=length(ind))
     return(list(val=v, info=odf))})
   
   # return list
