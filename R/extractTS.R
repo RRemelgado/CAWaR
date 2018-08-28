@@ -54,7 +54,7 @@ extractTS <- function(x, y) {
     
     if (class(y)[1] %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
       if (crs(x)@projargs!=crs(y)@projargs) {stop('"x" and "y" have different projections')}
-      ev <- TRUE}
+      if (is.raster(y)) {ev <- FALSE} else {ev <- TRUE}}
     
     if (is.numeric(y)) {
       if (length(y) > 1) {stop('"y" has more than 1 element')}
