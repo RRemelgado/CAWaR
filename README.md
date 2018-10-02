@@ -12,6 +12,17 @@ CAWaR was designed to support water management in Central Asia through the disti
 
 </br>
 
+### How to install the package?
+<p align="justify" style="line-height:200%;">
+As CAWaR is not yet on CRAN, we can install it using devtools as shown below.
+</p>
+
+```r
+devtools::install_github("RRemelgado/CAWaR")
+```
+
+</br>
+
 ### What else are we doing?
 <p align="justify" style="line-height:200%;">
 The Department of Remote Sensing of the University of Würzburg has developed other R packages that might interest you:
