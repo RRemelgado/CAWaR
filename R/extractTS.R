@@ -18,24 +18,6 @@
 #' @seealso \code{\link{analyzeTS}}
 #' @examples {
 #' 
-#' require(raster)
-#' require(fieldRS)
-#' 
-#' # read raster data
-#' r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
-#' 
-#' # read field data
-#' data(fieldData)
-#' 
-#' # read time series
-#' data(fieldDataTS)
-#' 
-#' # see information on selected pixels
-#' head(fieldDataTS$pixel.info)
-#' 
-#' # plot profile
-#' plot(fieldDataTS$weighted.mean[1,], type="l")
-#' 
 #' }
 #' @export
 
