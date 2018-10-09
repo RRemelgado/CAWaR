@@ -12,6 +12,8 @@ phenoCropVal(x, y, z, method = phenoCropClass)
 \item{y}{A \emph{character} vector.}
 
 \item{z}{A \emph{character} vector.}
+
+\item{method}{Function with classification method.}
 }
 \value{
 A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.

@@ -6,9 +6,10 @@
 #' @param n.size Numeric element.
 #' @return A \emph{list}.
 #' @importFrom raster crs extent raster cellStats aggregate cellFromXY xyFromCell rowFromCell colFromCell getValues setValues rasterToPolygons
-#' @importFrom stats kmeans
+#' @importFrom stats kmeans complete.cases
+#' @importFrom RStoolbox unsuperClass
 #' @details {The function clusters a raster object with k-means through \link[RStoolbox]{unsuperClass} and segments the output using
-#' \code{\link{}ccLabel}. The number of samples used to determine the number of clusters can be defined through \emph{n.size} to reduce
+#' \link[fieldRS]{ccLabel}. The number of samples used to determine the number of clusters can be defined through \emph{n.size} to reduce
 #' the required computational time. The optimal number of clusters is determined with the elbow method. he elbow method looks at the
 #' percentage of variance explained by the number of clusters. If adding a new cluster, refered here as k, leads to no improvement,
 #' the function will use k-1 to derive. This breakpoint is determined by \emph{change.threshold} which controls the percent change
@@ -16,8 +17,6 @@
 #'  \itemize{
 #'  \item{\emph{class} - Cluster image.}
 #'  \item{\emph{regions} - Segmented region image.}}}
-#' @seealso \code{\link{}}
-#' @examples {}
 #' @export
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#

@@ -23,6 +23,7 @@ erodes it and dilates it simplifying the shape of the corresponding pixels.}
 {
 
 require(raster)
+require(fieldRS)
 
 # read raster data
 r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))

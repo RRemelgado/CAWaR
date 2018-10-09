@@ -42,7 +42,6 @@ extractTS <- function(x, y) {
     if (is.numeric(y)) {
       if (length(y) > 1) {stop('"y" has more than 1 element')}
       y <- raster(extent(x), res=y, crs=crs(x))
-      process
       ev <- FALSE}
     
   }

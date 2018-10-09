@@ -69,6 +69,7 @@ countCropCycles <- function(x, min.length=c(1,1)) {
 # 3. count crop cylces
 #---------------------------------------------------------------------------------------------------------------------#
   
-  return(sum(s.id$values == 1))
+  return(sum(s.id == 1))
   
 }
+

@@ -4,11 +4,13 @@
 #' @param x Object of class \emph{RasterLayer}.
 #' @return A \emph{RasterLayer}.
 #' @importFrom raster raster res crs
+#' @importFrom fieldRS relative.freq
 #' @details {For each unique, non-NA value in \emph{x} the function derives a mask, 
 #' erodes it and dilates it simplifying the shape of the corresponding pixels.}
 #' @examples {
 #' 
 #' require(raster)
+#' require(fieldRS)
 #' 
 #' # read raster data
 #' r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))

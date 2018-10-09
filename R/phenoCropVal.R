@@ -4,6 +4,7 @@
 #' @param x A \emph{matrix} or \emph{data.frame}.
 #' @param y A \emph{character} vector.
 #' @param z A \emph{character} vector.
+#' @param method Function with classification method.
 #' @return A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.
 #' @importFrom stats cor
 #' @importFrom raster which.max
