@@ -5,7 +5,7 @@
 #' @param y A \emph{raster} object or a numeric element.
 #' @return A \emph{list}.
 #' @importFrom raster crs raster extent weighted.mean
-#' @importFrom rsMove poly2sample
+#' @importFrom fieldRS poly2sample
 #' @importFrom stats sd
 #' @details {For each polygon in \emph{x}, the function identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the
 #' percentage area covered by the polygon. Using this data as weights, the function calculates the weighted mean for each band in \emph{y}. 
@@ -54,11 +54,13 @@ extractTS <- function(x, y) {
     
     if (class(y)[1] %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
       if (crs(x)@projargs!=crs(y)@projargs) {stop('"x" and "y" have different projections')}
-      if (is.raster(y)) {ev <- FALSE} else {ev <- TRUE}}
+      nl <- nlayers(y)
+      ev <- TRUE}
     
     if (is.numeric(y)) {
       if (length(y) > 1) {stop('"y" has more than 1 element')}
       y <- raster(extent(x), res=y, crs=crs(x))
+      process
       ev <- FALSE}
     
   }
@@ -82,12 +84,25 @@ extractTS <- function(x, y) {
 # 3. estimate weighted mean
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
-  # extract raster values (if y is provided)
-  if (ev) {ev0 <- as.data.frame(extract(y, out.df[,c("x", "y")]))}
+  # if y is a raster object...
+  if (ev) {
+    
+    # extract raster values
+    ev0 <- as.data.frame(extract(y, out.df[,c("x", "y")]))
+    
+    # determine how values should be handled (different for single and multi-band rasters)
+    if (nl >1) {
+      summary.fun <- function(x,y) {apply(x, 2, function(j) {weighted.mean(j, y, na.rm=TRUE)})}
+    } else {
+      summary.fun <- function(x,y) {weighted.mean(x, y, na.rm=TRUE)}
+    }
+    
+  }
   
+  # derive polygon statistics / temporal profiles
   out.val <- lapply(unique(out.df$id), function(i) {
     ind <- which(out.df$id == i)
-    if (ev) {v <- apply(ev0[ind,], 2, function(j) {weighted.mean(j, out.df$cover[ind], na.rm=TRUE)})} else {v <- NULL}
+    if (ev) {v <- summary.fun(ev0[ind,], out.df$cover[ind])} else {v <- NULL}
     odf <- data.frame(id=i, x=mean(out.df$x[ind]), y=mean(out.df$y[ind]), min.cover=min(out.df$cover[ind]), 
                       max.cover=max(out.df$cover[ind]), mean.cover=mean(out.df$cover[ind]), 
                       cover.sd=sd(out.df$cover[ind]), count=length(ind))

@@ -2,11 +2,16 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Matches two vectors with different lenghts based on their maximum value.
 #' @param x Target numeric \emph{vector}.
+#' @param min.length Two element numeric \emph{vector}.
 #' @importFrom raster which.max
-#' @return A \emph{list} with selected indices for \emph{x} and \emph{y}. 
-#' @details {Uses Dynamic Time Wrapping (DTW) to match \emph{x} and \emph{y}. \emph{z} determines 
-#' the buffer size - expressed in number of data points - used to search for matching records. For 
-#' optimal performance, we recommend that \emph{x} is smoothed a priori.}
+#' @return A \emph{numeric} element with the number of crop cycles in \emph{x}. 
+#' @details {The function counts the number of value segments in \emph{x} that are above its mean 
+#' effectively counting the number of crop cycles. Before reporting the final value, \emph{min.length}} 
+#' is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
+#' cultivated/harvested). If the segment length is lower than the 1st element in \emph{min.length} the 
+#' segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
+#' the mean (i.e. crop growth/maturity). If the length of a segment is lower than the 2nd element in 
+#' \emph{min.length} it is labeled as "recently cultivated/harvested".
 #' @examples {
 #' 
 #' x <- c(293, 770, 1166, 1166, 1562, 2357, 3234, 
@@ -21,7 +26,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-countCropCycles <- function(x) {
+countCropCycles <- function(x, min.length=c(1,1)) {
   
 #---------------------------------------------------------------------------------------------------------------------#
 # 1. check input variables
@@ -34,19 +39,36 @@ countCropCycles <- function(x) {
 #---------------------------------------------------------------------------------------------------------------------#
   
   x1 <- x-mean(x) # identify break-point
-  x1[x1 > 0] <- 1 # points above break-point (crop maturity)
-  x1[x1 < 0] <- 0 # points below break-point (recently cultivated)
+  x1[x1 > 0] <- 1 # points above break-point (crop growth/maturity)
+  x1[x1 < 0] <- 0 # points below break-point (recently cultivated&harvested)
   s = rle(as.numeric(x1)) # identify growth cycles
-  n <- sum(s$values == 1) # count cycles
   
-#---------------------------------------------------------------------------------------------------------------------#
-# 3. identify breakpoints
-#---------------------------------------------------------------------------------------------------------------------#
-  
+  # assign segment ID's (round I)
   s.id <- vector("numeric", length(x))
   for (i in 1:length(s$lengths)) {s.id[(sum(s$lengths[0:(i-1)])+1):sum(s$length[1:i])] <- i}
   
+#---------------------------------------------------------------------------------------------------------------------#
+# 3. filter crop cylces
+#---------------------------------------------------------------------------------------------------------------------#
   
-  return(n)
+  uv <- unique(s.id[which(x1 == 0)]) # segments unique ID's (recently cultivated/harvested)
+  vs <- sapply(uv, function(u){sum(s.id == u)})
+  vi <- uv[which(vs < min.length[1])]
+  for (u in 1:length(vi)) {x1[which(s.id == vi[u])] <- 1}
+  
+  uv <- unique(s.id[which(x1 == 1)]) # segments unique ID's (crop maturity)
+  vs <- sapply(uv, function(u){sum(s.id == u)})
+  vi <- uv[which(vs < min.length[2])]
+  for (u in 1:length(vi)) {x1[which(s.id == vi[u])] <- 0}
+  
+  # assign segment ID's (round II)
+  s.id <- vector("numeric", length(x))
+  for (i in 1:length(s$lengths)) {s.id[(sum(s$lengths[0:(i-1)])+1):sum(s$length[1:i])] <- i}
+  
+#---------------------------------------------------------------------------------------------------------------------#
+# 3. count crop cylces
+#---------------------------------------------------------------------------------------------------------------------#
+  
+  return(sum(s.id$values == 1))
   
 }
