@@ -10,7 +10,7 @@ Maintainer: Ruben Remelgado <ruben.remelgado@uni-wuerzburg.de>
 Description: Package developmed in the Scope of the CAWa project. It provides tools to process ground-truth data on crop types and perform a phenology based crop type classification which extends on the work of Conrad et al. (2011) <doi:10.1080/01431161.2010.550647>. Moreover, the package introduces an innovative classification and validation scheme that utilizes spatialy independent samples as proposed by Remelgado et al. (2017) <doi:10.1002/rse2.70>.
 LazyData: TRUE
 Imports: raster, sp, caret, rgdal, ggplot2, grDevices, rsMove, spatialEco, rgeos, fieldRS, lubridate
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 License: GPL (>= 3)
 Suggests: knitr, rmarkdown, kableExtra, imager
 VignetteBuilder: knitr

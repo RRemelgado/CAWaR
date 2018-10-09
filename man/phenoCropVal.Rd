@@ -4,7 +4,7 @@
 \alias{phenoCropVal}
 \title{phenoCropVal}
 \usage{
-phenoCropVal(x, y, z)
+phenoCropVal(x, y, z, method = phenoCropClass)
 }
 \arguments{
 \item{x}{A \emph{matrix} or \emph{data.frame}.}

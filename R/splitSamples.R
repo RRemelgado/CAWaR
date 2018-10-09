@@ -7,7 +7,7 @@
 #' @param agg.radius Numeric element.
 #' @return A list.
 #' @importFrom raster res crs rasterize which.max rowFromCell colFromCell extract cellStats
-#' @importFrom rsMove checkOverlap
+#' @importFrom fieldRS checkOverlap
 #' @importFrom fieldRS spCentroid ccLabel
 #' @details {For each class in \emph{z}, the function converts the elements in \emph{x} into a raster layer using \emph{y} as a basis. Then, 
 #' it aggregates all pixels that are within a given distance of each other - defined by \emph{agg.radius} using \code{\link{ccLabel}}. The 

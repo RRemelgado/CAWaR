@@ -4,21 +4,27 @@
 \alias{countCropCycles}
 \title{countCropCycles}
 \usage{
-countCropCycles(x)
+countCropCycles(x, min.length = c(1, 1))
 }
 \arguments{
 \item{x}{Target numeric \emph{vector}.}
+
+\item{min.length}{Two element numeric \emph{vector}.}
 }
 \value{
-A \emph{list} with selected indices for \emph{x} and \emph{y}.
+A \emph{numeric} element with the number of crop cycles in \emph{x}.
 }
 \description{
 Matches two vectors with different lenghts based on their maximum value.
 }
 \details{
-{Uses Dynamic Time Wrapping (DTW) to match \emph{x} and \emph{y}. \emph{z} determines 
-the buffer size - expressed in number of data points - used to search for matching records. For 
-optimal performance, we recommend that \emph{x} is smoothed a priori.}
+{The function counts the number of value segments in \emph{x} that are above its mean 
+effectively counting the number of crop cycles. Before reporting the final value, \emph{min.length}} 
+is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
+cultivated/harvested). If the segment length is lower than the 1st element in \emph{min.length} the 
+segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
+the mean (i.e. crop growth/maturity). If the length of a segment is lower than the 2nd element in 
+\emph{min.length} it is labeled as "recently cultivated/harvested".
 }
 \examples{
 {
