@@ -18,6 +18,17 @@
 #' @seealso \code{\link{analyzeTS}}
 #' @examples {
 #' 
+#' require(raster)
+#' require(fieldRS)
+#' 
+#' # read raster data
+#' r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
+#' 
+#' # read field data
+#' data(fieldData)
+#' 
+#' extractTS(fieldData[1:5,], r)
+#' 
 #' }
 #' @export
 
@@ -65,17 +76,19 @@ extractTS <- function(x, y) {
 # 3. estimate weighted mean
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
+  ind = 0
+  
   # if y is a raster object...
   if (ev) {
     
     # extract raster values
-    ev0 <- as.data.frame(extract(y, out.df[,c("x", "y")]))
+    ev0 <- extract(y, out.df[,c("x", "y")])
     
     # determine how values should be handled (different for single and multi-band rasters)
     if (nl >1) {
-      summary.fun <- function(x,y) {apply(x, 2, function(j) {weighted.mean(j, y, na.rm=TRUE)})}
+      summary.fun <- function(x, y) {apply(x[ind,], 2, function(j) {weighted.mean(j, y[ind], na.rm=TRUE)})}
     } else {
-      summary.fun <- function(x,y) {weighted.mean(x, y, na.rm=TRUE)}
+      summary.fun <- function(x ,y) {weighted.mean(x[ind], y[ind], na.rm=TRUE)}
     }
     
   }
