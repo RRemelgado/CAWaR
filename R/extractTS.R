@@ -96,7 +96,7 @@ extractTS <- function(x, y) {
   # derive polygon statistics / temporal profiles
   out.val <- lapply(unique(out.df$id), function(i) {
     ind <- which(out.df$id == i)
-    if (ev) {v <- summary.fun(ev0[ind,], out.df$cover[ind])} else {v <- NULL}
+    if (ev) {v <- summary.fun(ev0, out.df$cover)} else {v <- NULL}
     odf <- data.frame(id=i, x=mean(out.df$x[ind]), y=mean(out.df$y[ind]), min.cover=min(out.df$cover[ind]), 
                       max.cover=max(out.df$cover[ind]), mean.cover=mean(out.df$cover[ind]), 
                       cover.sd=sd(out.df$cover[ind]), count=length(ind))
