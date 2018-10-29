@@ -4,7 +4,6 @@
 #' @param x A \emph{matrix} or \emph{data.frame}.
 #' @param y A \emph{character} vector.
 #' @param z A \emph{character} vector.
-#' @param method Function with classification method.
 #' @return A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.
 #' @importFrom stats cor
 #' @importFrom raster which.max
@@ -57,7 +56,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-phenoCropVal <- function(x, y, z, method=phenoCropClass) {
+phenoCropVal <- function(x, y, z) {
   
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   # 1. Check variables
@@ -99,6 +98,7 @@ phenoCropVal <- function(x, y, z, method=phenoCropClass) {
         vi <- which(z == unique.z[k] & y == unique.y[c])
         ti <- i0[!i0 %in% vi]
         
+        # assign class
         cropClass <- do.call(rbind, lapply(1:length(vi), function(j) {
           pc <- phenoCropClass(as.numeric(x[vi[j],]), x[ti,])
           i <- which.max(pc$r2)[1]
@@ -106,26 +106,10 @@ phenoCropVal <- function(x, y, z, method=phenoCropClass) {
           pc$class <- y[ti[i]]
           return(pc)}))
         
+        # 
         sample.class[vi] <- cropClass$class
         sample.count[vi] <- cropClass$count
         sample.r2[vi] <- cropClass$r2
-        
-        # build reference profiles
-        #tmp <- analyzeTS(x[ti,], y[ti])
-        #reference.ts <- do.call(rbind, lapply(tmp$y.statistics, function(j) {j$median}))
-        #reference.class <- tmp$labels
-        
-        # classification
-        #cropClass <- do.call(rbind, lapply(1:length(vi), function(j) {
-          # pc <- phenoCropClass(as.numeric(x[vi[j],]), reference.ts, match=TRUE)
-          # i <- which.max(pc$r2)
-          # pc <- pc[i,]
-          # pc$id <- i
-          # return(pc)}))
-          
-        #sample.class[vi] <- reference.class[cropClass$id]
-        #sample.count[vi] <- cropClass$count
-        #sample.r2[vi] <- cropClass$r2
         
         # validate results
         sample.val[vi] <- y[vi] == sample.class[vi]

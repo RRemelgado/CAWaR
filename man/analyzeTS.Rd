@@ -4,12 +4,14 @@
 \alias{analyzeTS}
 \title{analyzeTS}
 \usage{
-analyzeTS(x, y)
+analyzeTS(x, y, out.plot = NULL)
 }
 \arguments{
 \item{x}{Object of class \emph{data.frame}.}
 
 \item{y}{Vector of class \emph{character} or \emph{numeric} with a length equal to the number of rows in \emph{x}.}
+
+\item{out.plot}{Specifies the data path where plots should be stored.}
 }
 \value{
 A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampeled pixels.
@@ -25,7 +27,9 @@ row in \emph{x} against the median values for each unique class. The final outpu
 \itemize{
  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
  \item{\emph{y.r2} - \eqn{R^{2}} between the each row in \emph{x} and the median values for each unique class found in \emph{y.statistics}.}
- \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}}
+ \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}
+ If \emph{out.plot} is set, the function will save each plot as 10x10 cm PNG files within the specified path.
+ }
 }
 \examples{
 {

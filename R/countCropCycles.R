@@ -6,12 +6,12 @@
 #' @importFrom raster which.max
 #' @return A \emph{numeric} element with the number of crop cycles in \emph{x}. 
 #' @details {The function counts the number of value segments in \emph{x} that are above its mean 
-#' effectively counting the number of crop cycles. Before reporting the final value, \emph{min.length}} 
+#' effectively counting the number of crop cycles. Before reporting the final value, \emph{min.length} 
 #' is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
 #' cultivated/harvested). If the segment length is lower than the 1st element in \emph{min.length} the 
 #' segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
 #' the mean (i.e. crop growth/maturity). If the length of a segment is lower than the 2nd element in 
-#' \emph{min.length} it is labeled as "recently cultivated/harvested".
+#' \emph{min.length} it is labeled as "recently cultivated/harvested".}
 #' @examples {
 #' 
 #' x <- c(293, 770, 1166, 1166, 1562, 2357, 3234, 

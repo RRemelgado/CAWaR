@@ -28,7 +28,8 @@ use Dynamic Time Wraping (DTW) \emph{x} and \emph{y} at each iteration. \emph{z}
 buffer used to search to matching data points. The final output is a \emph{data.frame} containing:
 \itemize{
  \item{\emph{r2} - \eqn{R^{2}} between \emph{x} and each row \emph{y}.}
- \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}}}
+ \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}
+ \item{\emph{max.interval} - Maximum gap between data points when NA values exist.}}}
 }
 \examples{
 {

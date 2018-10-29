@@ -15,7 +15,7 @@ extractTS(x, y)
 A \emph{list}.
 }
 \description{
-Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
+Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPolygons} or a \emph{SpatialPolygonsDataFrame} object.
 }
 \details{
 {For each polygon in \emph{x}, the function identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the
@@ -29,6 +29,17 @@ estimated. The function returns a list of three \emph{data.frame} objects where 
 }
 \examples{
 {
+
+require(raster)
+require(fieldRS)
+
+# read raster data
+r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
+
+# read field data
+data(fieldData)
+
+extractTS(fieldData[1:5,], r)
 
 }
 }
