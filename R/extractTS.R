@@ -1,6 +1,6 @@
 #' @title extractTS
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPoints} object.
+#' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPolygons} or a \emph{SpatialPolygonsDataFrame} object.
 #' @param x Object of class \emph{SpatialPolygons} or \emph{SpatialPolygonsDataFrame}.
 #' @param y A \emph{raster} object or a numeric element.
 #' @return A \emph{list}.

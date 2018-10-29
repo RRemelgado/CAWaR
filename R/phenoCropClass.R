@@ -13,7 +13,8 @@
 #' buffer used to search to matching data points. The final output is a \emph{data.frame} containing:
 #' \itemize{
 #'  \item{\emph{r2} - \eqn{R^{2}} between \emph{x} and each row \emph{y}.}
-#'  \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}}}
+#'  \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}
+#'  \item{\emph{max.interval} - Maximum gap between data points when NA values exist.}}}
 #' @seealso \code{\link{analyzeTS}} \code{\link{phenoCropVal}}
 #' @examples {
 #' 
@@ -55,13 +56,16 @@ phenoCropClass <- function(x, y, z, match=FALSE) {
   odf <- do.call(rbind, lapply(1:nrow(y), function(j) {
     
     if (match) {
-      i <- matchIndices(as.numeric(x), as.numeric(y[j,]), z)
-      i <- which(!is.na(x[i$x]) & !is.na(y[j,i$y]))
+      
+      i <- matchIndices(as.numeric(x), as.numeric(y[j,]), z) # match x and y indices to start of season
+      x <- x[i$x[which(!is.na(x[i$x]))]] # select x values
+      y <- y[i$x[which(!is.na(y[i$y]))]] # select y values
+      
     } else {i <- which(!is.na(x) & !is.na(y[j,]))}
     
     if (length(i) > 0) {
       
-      r <- cor(as.numeric(x[i]), as.numeric(y[j,i]), method="kendall")
+      r <- cor(as.numeric(x[i]), as.numeric(y[j,i]), method="kendall") #  compare data points
       return(data.frame(r2=r, count=length(i)))
       
     } else {return(data.frame(r2=NA, count=NA))}}))
