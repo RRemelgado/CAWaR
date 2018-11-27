@@ -43,12 +43,17 @@ extractTS <- function(x, y) {
 
   if (!class(x)[1] %in% c('SpatialPolygons', 'SpatialPolygonsDataFrame')) {stop('"x" is not of a valid class')}
   
-  if (!class(y) %in% c("numeric", "RasterStack", "RasterLayer", "RasterBrick")) {stop('"y" is not of a valid class')} else {
+  if (!class(y) %in% c("numeric", "RasterStack", "RasterLayer", "RasterBrick","list")) {stop('"y" is not of a valid class')} else {
     
     if (class(y)[1] %in% c("RasterLayer", "RasterStack", "RasterBrick")) {
       if (crs(x)@projargs!=crs(y)@projargs) {stop('"x" and "y" have different projections')}
       nl <- nlayers(y)
       ev <- TRUE}
+    
+    if(is.list(y)) {
+      nl <- length(y)
+      ev <- TRUE
+    }
     
     if (is.numeric(y)) {
       if (length(y) > 1) {stop('"y" has more than 1 element')}
