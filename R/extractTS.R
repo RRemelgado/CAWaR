@@ -82,7 +82,9 @@ extractTS <- function(x, y) {
   if (ev) {
     
     # extract raster values
-    ev0 <- extract(y, out.df[,c("x", "y")])
+    if (!is.list(y)) {ev0 <- extract(y, out.df[,c("x", "y")])} else {
+      shp <- SpatialPoints(out.df[,c("x", "y")], proj4string=crs(x))
+      ev0 <- extract2(y, shp)}
     
     # determine how values should be handled (different for single and multi-band rasters)
     if (nl >1) {
