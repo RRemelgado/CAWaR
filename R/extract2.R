@@ -62,7 +62,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
 # 3. interpolate missing values (when prompted)  
 #----------------------------------------------------------------------------------------------------------------------------------#
   
-  if (int.time) {out.df <- intime(as.matrix(out.df), as.numeric(x.dates), as.numeric(out.dates), time.buffer)}
+  if (int.time) {out.df <- intime(as.matrix(out.df), as.numeric(x.date), as.numeric(out.date), time.buffer)}
   
 #----------------------------------------------------------------------------------------------------------------------------------#
 # 4. derive output
