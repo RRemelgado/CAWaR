@@ -4,7 +4,7 @@
 \alias{phenoCropVal}
 \title{phenoCropVal}
 \usage{
-phenoCropVal(x, y, z, method = phenoCropClass)
+phenoCropVal(x, y, z)
 }
 \arguments{
 \item{x}{A \emph{matrix} or \emph{data.frame}.}
@@ -12,8 +12,6 @@ phenoCropVal(x, y, z, method = phenoCropClass)
 \item{y}{A \emph{character} vector.}
 
 \item{z}{A \emph{character} vector.}
-
-\item{method}{Function with classification method.}
 }
 \value{
 A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.

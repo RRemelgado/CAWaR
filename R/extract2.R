@@ -26,7 +26,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
   if (!is.character(x) | !is.list(x)) {stop('"x" is not of a valid class')}
   if (is.character(x)) {x <- lapply(x, function(i) {return(tryCatch(raster(i), error=function(e) return(NULL)))})}
   if (is.list(x)) {x <- lapply(x, function(i) {return(tryCatch(is.raster(i), error=function(e) return(NULL)))})}
-  if (sum(sapply(x, function(i) {is.null(i)) > 0})) {stop('one or more elements in "x" are not valid (check entries)')}
+  if (sum(sapply(x, function(i) {is.null(i)}) > 0)) {stop('one or more elements in "x" are not valid (check entries)')}
   
   # is y a shapefile?
   if (!tryCatch(extent(y), error=function(e) return(FALSE))) {stop('"y" is not a valid spatial object')}
@@ -70,3 +70,4 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
   return(list(values=out.df, dates=out.dates))
 
 }
+
