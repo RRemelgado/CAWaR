@@ -10,6 +10,7 @@
 #' @importFrom raster raster
 #' @importFrom lubridate is.Date
 #' @importFrom rsMove intime
+#' @importFrom grDevices is.raster
 #' @details {Creates a rectangular fishnet in a \emph{SpatialPolygon} format based on the 
 #' extent of \emph{x} and the value of \emph{y} which defines the spatial resolution.}
 #' @export
@@ -35,7 +36,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
   if (!missing(x.date)) {
     
     # date information
-    if (!is.Date(x.date)) {stop('"x.date" provided but not a Date object'}
+    if (!is.Date(x.date)) {stop('"x.date" provided but not a Date object')}
     if (length(x.date) != length(x)) {stop('"x.date" and "x" should have the same lenght')}
     if (!missing(out.date)) {
       if (!is.Date(out.date)) {stop('"out.date" provided but not a Date object')}
