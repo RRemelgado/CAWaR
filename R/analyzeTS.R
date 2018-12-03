@@ -9,11 +9,9 @@
 #' @importFrom stats median mad
 #' @details {For each unique value in \emph{y}, the function will select the rows in \emph{x} that correspond to it and estimate the
 #' median, Median Absolte Deviation (MAD), minimum, maximum, mean and standard deviation for each column. Then, the function will build
-#' a plot showing the median and draw a buffer that expresses the minimum and maximum. Furthermore, the function will cross-correlate each
-#' row in \emph{x} against the median values for each unique class. The final output is a list consisting of:
+#' a plot showing the median and draw a buffer that expresses the minimum and maximum. The final output is a list consisting of:
 #' \itemize{
 #'  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
-#'  \item{\emph{y.r2} - \eqn{R^{2}} between the each row in \emph{x} and the median values for each unique class found in \emph{y.statistics}.}
 #'  \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}
 #'  If \emph{out.plot} is set, the function will save each plot as 10x10 cm PNG files within the specified path.
 #'  }
@@ -76,27 +74,13 @@ analyzeTS <- function(x, y, out.plot=NULL) {
     return(list(stats=d, plot=p))})
   
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 4. correlate reference and id-wise time-series
+# 4. return output as a list
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
-  d <- do.call(rbind, lapply(tmp, function(r) {r$stats$median}))
-  d <- as.data.frame(do.call(rbind, lapply(1:nrow(x), function(r) {
-    v1 <- as.numeric(x[r,])
-    r2 <- sapply(1:nrow(d), function(c) {
-      v2 <- d[c,]
-      i <- which(!is.na(v1) & !is.na(v2))
-      return(cor(v1[i], v2[i])^2)})
-    return(r2)})))
-  colnames(d) <- unique.y
+  return(list(labels=unique.y, y.statistics=lapply(tmp, function(i) {i$stats}), plots=lapply(tmp, function(i) {i$plot})))
   
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 5. return output as a list
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-  
-  return(list(labels=unique.y, y.statistics=lapply(tmp, function(i) {i$stats}), r2=d, plots=lapply(tmp, function(i) {i$plot})))
-  
-#-----------------------------------------------------------------------------------------------------------------------------------------------#
-# 6. save plots (if prompted)
+# 5. save plots (if prompted)
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   if (!is.null(out.plot)) {
@@ -105,7 +89,7 @@ analyzeTS <- function(x, y, out.plot=NULL) {
     
     for (p in 1:length(unique(unique.y))) {
       
-      ggsave(file.path(out.plot, paste0(sprintf(string.format, '_', unique.y[p], '.png'))), width=10, height=10, units="cm")
+      ggsave(file.path(out.plot, paste0(sprintf(string.format, p), '_', unique.y[p], '.png')), tmp[[p]]$plot, width=10, height=10, units="cm")
       
     }
     
