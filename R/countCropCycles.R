@@ -8,9 +8,9 @@
 #' @details {The function counts the number of value segments in \emph{x} that are above its mean 
 #' effectively counting the number of crop cycles. Before reporting the final value, \emph{min.length} 
 #' is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
-#' cultivated/harvested). If the segment length is lower than the 1st element in \emph{min.length} the 
+#' cultivated/harvested). If the segment length is greater than the 1st element in \emph{min.length} the 
 #' segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
-#' the mean (i.e. crop growth/maturity). If the length of a segment is lower than the 2nd element in 
+#' the mean (i.e. crop growth/maturity). If the length of a segment is greater than the 2nd element in 
 #' \emph{min.length} it is labeled as "recently cultivated/harvested".}
 #' @examples {
 #' 
@@ -40,7 +40,7 @@ countCropCycles <- function(x, min.length=c(1,1)) {
   
   x1 <- x-mean(x) # identify break-point
   x1[x1 > 0] <- 1 # points above break-point (crop growth/maturity)
-  x1[x1 < 0] <- 0 # points below break-point (recently cultivated&harvested)
+  x1[x1 < 0] <- 0 # points below break-point (recently cultivated/harvested)
   s = rle(as.numeric(x1)) # identify growth cycles
   
   # assign segment ID's (round I)
@@ -51,7 +51,7 @@ countCropCycles <- function(x, min.length=c(1,1)) {
 # 3. filter crop cylces
 #---------------------------------------------------------------------------------------------------------------------#
   
-  uv <- unique(s.id[which(x1 == 0)]) # segments unique ID's (recently cultivated/harvested)
+  uv <- unique(s.id[x1==0]) # segments unique ID's (recently cultivated/harvested)
   vs <- sapply(uv, function(u){sum(s.id == u)})
   vi <- uv[which(vs < min.length[1])]
   for (u in 1:length(vi)) {x1[which(s.id == vi[u])] <- 1}
@@ -69,7 +69,7 @@ countCropCycles <- function(x, min.length=c(1,1)) {
 # 3. count crop cylces
 #---------------------------------------------------------------------------------------------------------------------#
   
-  return(sum(s.id == 1))
+  return(length(unique(s.id[x1==1])))
   
 }
 

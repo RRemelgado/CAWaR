@@ -4,12 +4,16 @@
 \alias{extractTS}
 \title{extractTS}
 \usage{
-extractTS(x, y)
+extractTS(x, y, z, id)
 }
 \arguments{
-\item{x}{Object of class \emph{SpatialPolygons} or \emph{SpatialPolygonsDataFrame}.}
+\item{x}{Object of class \emph{SpatialPolygons}, \emph{SpatialPolygonsDataFrame}, \emph{SpatialPoints} or \emph{SpatialPointsDataFrame}.}
 
-\item{y}{A \emph{raster} object or a numeric element.}
+\item{y}{A \emph{raster} object, a list of \emph{RasterLayer}'s or a numeric element.}
+
+\item{z}{\emph{Numeric} vector with weights for each element in \emph{x} (when points).}
+
+\item{id}{\emph{Numeric} vector with unique identifiers for \emph{x} (when points).}
 }
 \value{
 A \emph{list}.
@@ -18,12 +22,15 @@ A \emph{list}.
 Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPolygons} or a \emph{SpatialPolygonsDataFrame} object.
 }
 \details{
-{For each polygon in \emph{x}, the function identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the
-percentage area covered by the polygon. Using this data as weights, the function calculates the weighted mean for each band in \emph{y}. 
-If \emph{y} is a numeric element, the function will build a raster with resolution equal to \emph{y} over which the pixel cover will be 
-estimated. The function returns a list of three \emph{data.frame} objects where each row represents a different polygon in \emph{x}:
+{For each polygon in \emph{x} - if \emph{x} is a \emph{SpatialPolygons} and \emph{SpatialPolygonsDataFrame} object - the function 
+identifies the overlapping pixels in \emph{y} and, for each pixel, estimates thepercentage area covered by the polygon. Using this data as 
+weights, the function calculates the weighted mean for each band in \emph{y}. If \emph{y} is a numeric element, the function will build a 
+raster with resolution equal to \emph{y} over which the pixel cover will be estimated. Moreover, if \emph{x} is a \emph{SpatialPoints} or 
+a \emph{SpatialPointsDataFrame} object, the function will skip the pixel extraction step. In this case, the user may provide a vector with 
+sample weights through \emph{z} and a vector of unique identifiers (reporting on e.g. the polygon membership) The function returns a list 
+of three \emph{data.frame} objects where each row represents a different polygon in \emph{x}:
 \itemize{
-\item{\emph{pixel.info} - Extracted weighted-mean time-series.}
+\item{\emph{pixel.info} - \emph{SpatialPointsDataFrame} with pixel-wise samples for each polygon (identified by the field \emph{id}).}
 \item{\emph{polygon.info} - Mean, min, max and standard deviation of the pixel cover; centroid coordinates.}
 \item{\emph{weighted.mean} - Weighted mean raster values (if \emph{y} is a raster object).}}}
 }

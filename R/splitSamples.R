@@ -65,8 +65,7 @@ splitSamples <- function(x, y, z, agg.radius=agg.radius) {
   
   if (!is.numeric(agg.radius)) {stop('"agg.radius" is not a numeric element')}
   if (length(agg.radius) > 1) {stop('"agg.radius" has more than 1 element')}
-  agg.radius <- round(agg.radius/res(y)[1]) # number of pixels
-  if (agg.radius == (round(33 / 2)*2)) {agg.radius <- agg.radius + 1}
+  agg.radius <- round(agg.radius/res(y)[1])*2+1 # minimum pixel distance between clusters
   
   #-----------------------------------------------------------------------------------------------------------------------------------------------#
   # 2. derive region indices

@@ -22,11 +22,9 @@ Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialP
 \details{
 {For each unique value in \emph{y}, the function will select the rows in \emph{x} that correspond to it and estimate the
 median, Median Absolte Deviation (MAD), minimum, maximum, mean and standard deviation for each column. Then, the function will build
-a plot showing the median and draw a buffer that expresses the minimum and maximum. Furthermore, the function will cross-correlate each
-row in \emph{x} against the median values for each unique class. The final output is a list consisting of:
+a plot showing the median and draw a buffer that expresses the minimum and maximum. The final output is a list consisting of:
 \itemize{
  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
- \item{\emph{y.r2} - \eqn{R^{2}} between the each row in \emph{x} and the median values for each unique class found in \emph{y.statistics}.}
  \item{\emph{plots} - List of line plots for each unique element in \emph{y}.}}
  If \emph{out.plot} is set, the function will save each plot as 10x10 cm PNG files within the specified path.
  }
