@@ -15,5 +15,5 @@ findBare(x, y)
 Determines if a vector is likely related to unused non-croped areas.
 }
 \details{
-Judges if \emph{x} is a time series of non-agricultural land (poitnetial bare land) based on its amplitude.
+{Judges if \emph{x} is a time series of non-agricultural land (poitnetial bare land) based on its amplitude.}
 }

@@ -3,7 +3,7 @@
 #' @description Determines if a vector is likely related to unused non-croped areas. 
 #' @param x Numeric \emph{vector}.
 #' @param y Change threshold (in %).
-#' @details Judges if \emph{x} is a time series of non-agricultural land (poitnetial bare land) based on its amplitude.
+#' @details {Judges if \emph{x} is a time series of non-agricultural land (poitnetial bare land) based on its amplitude.}
 #' @export
 
 #---------------------------------------------------------------------------------------------------------------------#
