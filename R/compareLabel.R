@@ -123,7 +123,7 @@ compareLabel <- function(x, y, x.label, y.label, na.count=0, max.length=0) {
     class.compare <- class.label == x.label # is the class correct?
     
     # build report data.frame
-    odf <- data.frame(x=x.label, y=class.label, probable.y=class.label, peason=NA, compare=NA, stringsAsFactors=FALSE)
+    odf <- data.frame(x.label=x.label, y.label=class.label, peason=NA, compare=NA, stringsAsFactors=FALSE)
     odf$pearson[ind]=pearson.cor
     odf$compare[ind]=class.compare
     

@@ -96,3 +96,40 @@ kable_styling(kable(head(checkTS1$r2, 5), digits=c(2,2), format="html", align="c
 #  
 #  for (p in 1:length(fieldData)) {ggsave(checkTS2$plots[[p]], paste0("./", checkTS2$labels[p], ".png"), width=10, height=10, units="cm")}
 
+## ------------------------------------------------------------------------
+# retrieve reference profiles as a data.frame
+reference.profiles <- as.data.frame(do.call(rbind, lapply(checkTS1$y.statistics, function(i) {i$median})))
+
+# compare original data and its statistical reference
+cl <- compareLabel(as.data.frame(fieldDataTS$weighted.mean), reference.profiles, fieldData$crop_2, checkTS1$labels)
+
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+kable_styling(kable(head(cl$label.compare, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+include_graphics("spatialValidation.png")
+
+## ----eval=FALSE----------------------------------------------------------
+#  fieldDataCluster <- splitSamples(fieldData, ndvi.ts, fieldData$crop_2, agg.radius=60)
+
+## ----echo=FALSE----------------------------------------------------------
+data(fieldDataCluster)
+
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+kable_styling(kable(head(fieldDataCluster$region.frequency, 5), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+
+## ------------------------------------------------------------------------
+cropVal <- phenoCropVal(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2, fieldDataCluster$region.id)
+
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+kable_styling(kable(head(cropVal$class.accuracy, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
+cropVal$accuracy.plot
+
+## ----eval=FALSE----------------------------------------------------------
+#  fieldData$validation <- as.factor(cropVal$sample.validation)
+#  spplot(fieldData["validation"])
+
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+fieldData$validation <- as.factor(cropVal$sample.validation)
+spplot(fieldData["validation"])
+

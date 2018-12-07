@@ -235,7 +235,7 @@ for (p in 1:length(fieldData)) {ggsave(checkTS2$plots[[p]], paste0("./", checkTS
 ```
 
 <p align="justify" style="line-height:200%;">
-Double checking the quality of the NDVI temporal profiles is indeed necessary. In our experience, apart from the occasional misspelling, we often find misslabelling. When this happens, the quality of any predictive model is hindered from the start and it can be quite hard to track down these mistakes. However, looking through thousands of plots can be exhausting us leading to frustration and perpetual errors. To minimize this workload, we can use `compareLabel()`. This function Will compare each row in a `data.frame` (e.g. weighted mean time-series derived with `extractTS()`) against a set of reference profiles (e.g. median profiles derived with `analizeTS()`). The function correlates th etarget and reference profiles and compares the lables for the profiles with the highest correlation. If not the same, the function will return NA. Additionally, the function reports on the distribution on NA values helping the user decide which profiles remain unclear.
+Double checking the quality of the NDVI temporal profiles is indeed necessary. In our experience, apart from the occasional misspelling, we often find misslabelling. When this happens, the quality of any predictive model is hindered from the start and it can be quite hard to track down these mistakes. However, looking through thousands of plots can be exhausting us leading to frustration and perpetual errors. To minimize this workload, we can use `compareLabel()`. This function Will compare each row in a `data.frame` (e.g. weighted mean time-series derived with `extractTS()`) against a set of reference profiles (e.g. median profiles derived with `analizeTS()`). The function correlates th etarget and reference profiles and compares the lables for the profiles with the highest correlation. If not the same, the function will return NA. Additionally, the function reports on the distribution on NA values helping the user decide which profiles remain unclear. Below we seen an example.
 </p>
 
 ```{r}
@@ -249,6 +249,11 @@ cl <- compareLabel(as.data.frame(fieldDataTS$weighted.mean), reference.profiles,
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}
 kable_styling(kable(head(cl$label.compare, 5), digits=c(2,2), format="html", align="c", full_width=TRUE), "stripped", bootstrap_options="responsive")
 ```
+
+<p align="justify" style="line-height:200%;">
+The output shows us the original label (`x.label`) the most likely label based on the reference data (`y.label`), the pearson correlation between the target and reference (`pearson`) and a logical variable (`compare`) which shows if the original and predicted labels match.
+</p>
+
 
 </br>
 
