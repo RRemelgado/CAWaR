@@ -9,7 +9,10 @@ findBare(x, y)
 \arguments{
 \item{x}{Numeric \emph{vector}.}
 
-\item{y}{Change threshold (in %).}
+\item{y}{Change threshold (in %)}
+}
+\value{
+A logical element.
 }
 \description{
 Determines if a vector is likely related to unused non-croped areas.

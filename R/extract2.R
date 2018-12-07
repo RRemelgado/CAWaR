@@ -68,7 +68,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
 # 4. derive output
 #----------------------------------------------------------------------------------------------------------------------------------#
 
-  return(list(values=out.df, dates=out.dates))
+  return(list(values=out.df, dates=out.date))
 
 }
 

@@ -37,3 +37,21 @@ NULL
 #' @usage data(fieldDataCluster)
 #' @format A data.frame
 NULL
+
+#' Point shapefile.
+#'
+#' Ground truth data on crop types collected in Uzbekistan derived from the fieldData dataset with poly2sample.
+#'
+#' \itemize{
+#'   \item{x}{x coordinates.}
+#'   \item{y}{y coordinates.}
+#'   \item{cover}{Percent overlap between the the pixel each point was derived from and the corresponding polygon.}
+#'   \item{id}{Unique identifier of the polygon the points belong to.}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name fieldData2
+#' @usage data(fieldData)
+#' @format A SpatialPointsDataFrame
+NULL

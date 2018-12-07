@@ -4,16 +4,20 @@
 \alias{compareLabel}
 \title{compareLabel}
 \usage{
-compareLabel(x, y, x.label, y.label, na.count = 0, max.na.count = 0)
+compareLabel(x, y, x.label, y.label, na.count = 0, max.length = 0)
 }
 \arguments{
 \item{x}{Object of class \emph{data.frame} with target profiles.}
 
 \item{y}{Object of class \emph{data.frame} with reference profiles.}
 
-\item{x.lab}{\emph{Character vector} with classes of \emph{x}.}
+\item{x.label}{\emph{Character vector} with classes of \emph{x}.}
 
-\item{y.lab}{\emph{Character vector} with classes of \emph{y}.}
+\item{y.label}{\emph{Character vector} with classes of \emph{y}.}
+
+\item{na.count}{Maximum number of NA values accepted.}
+
+\item{max.length}{Maximum length of consecutive NA values accepted.}
 }
 \value{
 A \emph{list}.
@@ -27,11 +31,32 @@ the element in \emph{y.label} with the highest correlation. The funal output of 
 \itemize{
  \item{\emph{cross.cor} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
  \item{\emph{label.comapre} - \emph{data.frame} showing \emph{y.label} and the nbest match in \emph{y.label}.}
- \item{\emph{na.stats} - \emph{data.frame} showing the count and maximum segment size of NA values for each row in \emph{x}.}
- }}
+ \item{\emph{na.stats} - \emph{data.frame} showing the count and maximum number of consecutive NA values for each row in \emph{x}.}
+ }
+ Note that \emph{na.count} and \emph{max.length} determine which observations are judged. If These thresholds are exceeded, 
+ the function will return NA.}
 }
 \examples{
 {
+
+require(raster)
+require(fieldRS)
+
+# read raster data
+r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
+
+# read field data
+data(fieldData)
+data(fieldDataTS)
+
+a.ts <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
+
+# extract reference profiles
+rp <- as.data.frame(do.call(rbind, lapply(a.ts$y.statistics, function(i) {i$median})))
+
+# compare labels
+cl <- compareLabel(as.data.frame(fieldDataTS$weighted.mean), rp, fieldData$crop, a.ts$labels)
+
 }
 }
 \seealso{
