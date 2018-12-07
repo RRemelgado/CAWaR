@@ -2,8 +2,8 @@ Package: CAWaR
 Type: Package
 Title: CAWa Project R Package
 Version: 0.0.1
-Date: 2018-10-29
-Authors@R: person("Ruben", "Remelgado", role = c("aut", "cre"), email="ruben.remelgado@uni-wuerzburg.de")
+Date: 2018-12-07
+Authors@R: person("Ruben", "Remelgado", role = c("aut", "cre"), email="remelgado.ruben@gmail.com")
 URL: https://github.com/RRemelgado/fieldRS/
 BugReports: https://github.com/RRemelgado/fieldRS/issues/
 Maintainer: Ruben Remelgado <ruben.remelgado@uni-wuerzburg.de>
@@ -11,7 +11,7 @@ Description: Package developmed in the Scope of the CAWa project. It provides to
 LazyData: TRUE
 Encoding: UTF-8
 Imports: raster, sp, rgdal, ggplot2, grDevices, rsMove, spatialEco, rgeos, fieldRS, lubridate, RStoolbox
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 License: GPL (>= 3)
 Suggests: knitr, rmarkdown, kableExtra, imager
 VignetteBuilder: knitr

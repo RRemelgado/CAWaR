@@ -85,7 +85,7 @@ kable_styling(kable(head(fieldDataTS$weighted.mean, 5), format="html", align="c"
 ## ------------------------------------------------------------------------
 checkTS1 <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2)
 
-## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----
+## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE, message=TRUE----
 checkTS1$plots
 
 ## ---- out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE----

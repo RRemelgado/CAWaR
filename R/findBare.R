@@ -1,19 +1,33 @@
 #' @title findBare
-#---------------------------------------------------------------------------------------------------------------------#
-#' @description Determines if a vector is likely related to unused non-croped areas. 
-#' @param x Numeric \emph{vector}.
-#' @param y Change threshold (in %)
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
+#' @description Shows is a vector is related to bare/fallow land..
+#' @param x A numeric \emph{vector}.
+#' @param y A numeric element.
 #' @return A logical element.
-#' @details {Judges if \emph{x} is a time series of non-agricultural land (poitnetial bare land) based on its amplitude.}
+#' @details {The function computes the amplitude of \emph{x} and returns TRUE if this value is below the threhsold given by \emph{y}.}
+#' @examples {
+#' 
+#' # vectors to test
+#' x1 <- c(0.1,0.2,0.1,0.2,0.4,0.6,0.8,0.4,0.1) # simulated, crop profile
+#' x2 <- c(0.1,0.3,0.2,0.2,0.1,0.3,0.1,0.2,0.2) # simulated, non-crop profile
+#' 
+#' # compare profiles
+#' plot(x1, type="l")
+#' lines(x2, col="red")
+#' 
+#' findBare(x1, 100) # returns TRUE
+#' findBare(x2, 100) # returns FALSE
+#' 
+#' }
 #' @export
 
-#---------------------------------------------------------------------------------------------------------------------#
-#---------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
 
 findBare <- function(x, y) {
   
 #---------------------------------------------------------------------------------------------------------------------#
-# 1. check input variables
+# 1. check input
 #---------------------------------------------------------------------------------------------------------------------#
   
   if (!is.numeric(x)) {stop('"x" is not a numeric vector')}
@@ -24,9 +38,7 @@ findBare <- function(x, y) {
 # 2. Evaluate x
 #---------------------------------------------------------------------------------------------------------------------#
   
-  x <- x / max(x) # normalize x bz its maximum
-  a <- max(x) - min(x) # amplitude of x
-  
-  return(a < y)
+  return((max(x) - min(x)) < y)
   
 }
+  

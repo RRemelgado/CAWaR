@@ -165,6 +165,7 @@ The case we reported assumes that we don't know which classes are expected and t
 </br>
 
 ### Extracting temporal profiles
+<p align="justify" style="line-height:200%;">
 The crop classification algorithm built in the scope of the CAWa project distinguishes crop types based on their unique phenological behaviour. To know how distinctive the growth cycle of a particular crop ground-truth data is quite informative. Since single pixels can be misleading due to e.g. uneven growth patterns within a field, it might be useful to summarize the overlapping pixels into a single time-series. However, when dealing with field polygons, not all the collected pixels are useful. Along the borders of a sampled field we might note - as depicted in the image below - that some pixels are only partialy covered and might be shared with fields that contain different crops with distinct growth cycles. As a consequence, a simple averaging of the pixels might bot be sufficient to efficiently summarize the temporal variable of the target crop within the drawn polygon.
 </p>
 
@@ -204,6 +205,7 @@ kable_styling(kable(head(fieldDataTS$weighted.mean, 5), format="html", align="c"
 ```
 
 </br>
+
 ### Building reference profiles: How should each crop type look like?
 <p align="justify" style="line-height:200%;">
 before, we learned how to deal with misspellings. Now, we will learn how to deal with mislabelings. This is an frequent issue. When on the field, some crops can look very similar - especially when in early stages of growth - becoming hard to distinguish. As a consequence, the sampler can report on the wrong label. When using mislabelled samples for classification, we might face poor validation results and it can be hard - if not impossible - to improve the classification results as long as such mistakes are not corrected. Thus it is important that we check eah polygon a priori to assure its veracity. `analyzeTS()`can help us in this task. The function will derive statistics for each unique class in `fieldData` and use the median of each time-step to build a plot. While some samples might be wrongly labeled, we assume most of them are correct and that the median offers an accurate depiction of the ideal profiles.
@@ -212,7 +214,7 @@ before, we learned how to deal with misspellings. Now, we will learn how to deal
 ```{r}
 checkTS1 <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2)
 ```
-``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}
+``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE, message=TRUE}
 checkTS1$plots
 ```
 
