@@ -20,7 +20,7 @@
 #'  }
 #'  Note that \emph{na.count} and \emph{max.length} determine which observations are judged. If These thresholds are exceeded, 
 #'  the function will return NA.}
-#' @seealso \code{\link{extractTS}} \code{\link{phenoCropVal}} \code{\link{phenoCropClass}}
+#' @seealso \code{\link{extractTS}} \code{\link{analyzeTS}}
 #' @examples {
 #' 
 #' require(raster)
