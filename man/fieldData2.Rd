@@ -6,7 +6,7 @@
 \title{Point shapefile.}
 \format{A SpatialPointsDataFrame}
 \usage{
-data(fieldData)
+data(fieldData2)
 }
 \description{
 Ground truth data on crop types collected in Uzbekistan derived from the fieldData dataset with poly2sample.

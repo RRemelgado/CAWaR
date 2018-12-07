@@ -52,6 +52,6 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name fieldData2
-#' @usage data(fieldData)
+#' @usage data(fieldData2)
 #' @format A SpatialPointsDataFrame
 NULL
