@@ -13,5 +13,5 @@ Encoding: UTF-8
 Imports: raster, sp, rgdal, ggplot2, grDevices, rsMove, spatialEco, rgeos, fieldRS, lubridate, RStoolbox
 RoxygenNote: 6.1.1
 License: GPL (>= 3)
-Suggests: knitr, rmarkdown, kableExtra, imager
+Suggests: knitr, rmarkdown, kableExtra, imager, lattice
 VignetteBuilder: knitr
