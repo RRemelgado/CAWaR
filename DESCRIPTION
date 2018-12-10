@@ -11,7 +11,7 @@ Description: Package developmed in the Scope of the CAWa project. It provides to
 LazyData: TRUE
 Encoding: UTF-8
 Imports: raster, sp, rgdal, ggplot2, grDevices, spatialEco, rgeos, lubridate, RStoolbox
-Remotes: svn::https://github.com/RRemelgado/rsMove, svn::https://github.com/RRemelgado/fieldRS
+Remotes: RRemelgado/rsMove, RRemelgado/fieldRS
 RoxygenNote: 6.1.1
 License: GPL (>= 3)
 Suggests: knitr, rmarkdown, kableExtra, imager, lattice
