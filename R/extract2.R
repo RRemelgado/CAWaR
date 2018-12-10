@@ -50,6 +50,11 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
     if (!is.numeric(time.buffer)) {stop('"time.buffer" is not numeric')}
     if (length(time.buffer)==1) {time.buffer <- c(time.buffer, time.buffer)}
     
+    io <- order(x.date) # image order (by date)
+    x <- x[io] # sort imput images
+    x.date <- x.date[io] # sort input dates
+    out.date <- sort(out.date) # sort output dates
+    
   } else {int.time <- FALSE}
   
 #----------------------------------------------------------------------------------------------------------------------------------#

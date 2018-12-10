@@ -20,7 +20,7 @@
 #'  }
 #'  Note that \emph{na.count} and \emph{max.length} determine which observations are judged. If These thresholds are exceeded, 
 #'  the function will return NA.}
-#' @seealso \code{\link{extractTS}} \code{\link{analyzeTS}}
+#' @seealso \code{\link{extractTS}} \code{\link{analyseTS}}
 #' @examples {
 #' 
 #' require(raster)

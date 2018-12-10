@@ -208,11 +208,11 @@ kable_styling(kable(head(fieldDataTS$weighted.mean, 5), format="html", align="c"
 
 ### Building reference profiles: How should each crop type look like?
 <p align="justify" style="line-height:200%;">
-before, we learned how to deal with misspellings. Now, we will learn how to deal with mislabelings. This is an frequent issue. When on the field, some crops can look very similar - especially when in early stages of growth - becoming hard to distinguish. As a consequence, the sampler can report on the wrong label. When using mislabelled samples for classification, we might face poor validation results and it can be hard - if not impossible - to improve the classification results as long as such mistakes are not corrected. Thus it is important that we check eah polygon a priori to assure its veracity. `analyzeTS()`can help us in this task. The function will derive statistics for each unique class in `fieldData` and use the median of each time-step to build a plot. While some samples might be wrongly labeled, we assume most of them are correct and that the median offers an accurate depiction of the ideal profiles.
+before, we learned how to deal with misspellings. Now, we will learn how to deal with mislabelings. This is an frequent issue. When on the field, some crops can look very similar - especially when in early stages of growth - becoming hard to distinguish. As a consequence, the sampler can report on the wrong label. When using mislabelled samples for classification, we might face poor validation results and it can be hard - if not impossible - to improve the classification results as long as such mistakes are not corrected. Thus it is important that we check eah polygon a priori to assure its veracity. `analyseTS()`can help us in this task. The function will derive statistics for each unique class in `fieldData` and use the median of each time-step to build a plot. While some samples might be wrongly labeled, we assume most of them are correct and that the median offers an accurate depiction of the ideal profiles.
 </p>
 
 ```{r}
-checkTS1 <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2)
+checkTS1 <- analyseTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop_2)
 ```
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE, message=FALSE}
 checkTS1$plots[[1]]
@@ -232,7 +232,7 @@ If the user wishes to check the profiles for every sample, `extractTS()` can sti
 </p>
 
 ```{r, eval=FALSE}
-checkTS2 <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), as.character(1:length(fieldData)))
+checkTS2 <- analyseTS(as.data.frame(fieldDataTS$weighted.mean), as.character(1:length(fieldData)))
 
 for (p in 1:length(fieldData)) {ggsave(checkTS2$plots[[p]], paste0("./", checkTS2$labels[p], ".png"), width=10, height=10, units="cm")}
 ```
@@ -262,7 +262,7 @@ The output shows us the original label (`x.label`) the most likely label based o
 
 ### PhenoCropVal: A new concept of land cover validation!
 <p align="justify" style="line-height:200%;">
-Up to this point we completed the pre-processing of `fieldData` and derived reference profiles for the classes that should be distinguished. However, before we build a map from this, we might want to check how good the classification is expected to be. This avoids time-consuming raster processing and helps antecipate the need for further pre-processing. `phenoCropVal()` does just that. In practice, this algorithm will use `analyzeTS()` to build reference profiles. The main difference is in how it separates training and validation data. The function requires a vector showing which samples should be grouped. Then, it keeps each group for validation while the remaining samples are used to build reference profiles for each class using `analyzeTS()`. The function will then call `phenoCropClass()` to classify the validation profiles and will identify the samples that passed and failed the test. This process is repeated for each group in each class. For each class, the function will derive an F1-score as an accuracy measure which is estimated from the total amount of true and false positives collected at each iteration.
+Up to this point we completed the pre-processing of `fieldData` and derived reference profiles for the classes that should be distinguished. However, before we build a map from this, we might want to check how good the classification is expected to be. This avoids time-consuming raster processing and helps antecipate the need for further pre-processing. `phenoCropVal()` does just that. In practice, this algorithm will use `analyseTS()` to build reference profiles. The main difference is in how it separates training and validation data. The function requires a vector showing which samples should be grouped. Then, it keeps each group for validation while the remaining samples are used to build reference profiles for each class using `analyseTS()`. The function will then call `phenoCropClass()` to classify the validation profiles and will identify the samples that passed and failed the test. This process is repeated for each group in each class. For each class, the function will derive an F1-score as an accuracy measure which is estimated from the total amount of true and false positives collected at each iteration.
 </p>
 
 ``` {r, out.width="98%", fig.height=5, fig.width=10, dpi=600, fig.align="center", fig.show='hold', echo=FALSE}

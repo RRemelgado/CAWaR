@@ -20,7 +20,7 @@
 #' \item{\emph{pixel.info} - \emph{SpatialPointsDataFrame} with pixel-wise samples for each polygon (identified by the field \emph{id}).}
 #' \item{\emph{polygon.info} - Mean, min, max and standard deviation of the pixel cover; centroid coordinates.}
 #' \item{\emph{weighted.mean} - Weighted mean raster values (if \emph{y} is a raster object).}}}
-#' @seealso \code{\link{analyzeTS}}
+#' @seealso \code{\link{analyseTS}}
 #' @examples {
 #' 
 #' require(raster)

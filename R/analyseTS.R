@@ -1,4 +1,4 @@
-#' @title analyzeTS
+#' @title analyseTS
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Summarizes multi-band \emph{raster} data within each element of a \emph{SpatialPolygons} object.
 #' @param x Object of class \emph{data.frame}.
@@ -28,7 +28,7 @@
 #' data(fieldData)
 #' data(fieldDataTS)
 #' 
-#' a.ts <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
+#' a.ts <- analyseTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
 #' 
 #' }
 #' @export
@@ -36,7 +36,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-analyzeTS <- function(x, y, out.plot=NULL) {
+analyseTS <- function(x, y, out.plot=NULL) {
   
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 # 1. check variables
