@@ -60,5 +60,5 @@ cl <- compareLabel(as.data.frame(fieldDataTS$weighted.mean), rp, fieldData$crop,
 }
 }
 \seealso{
-\code{\link{extractTS}} \code{\link{phenoCropVal}} \code{\link{phenoCropClass}}
+\code{\link{extractTS}} \code{\link{analyzeTS}}
 }
