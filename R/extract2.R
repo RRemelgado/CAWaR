@@ -24,7 +24,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
 #----------------------------------------------------------------------------------------------------------------------------------#
   
   # is x composed of readble raster data?
-  if (!is.character(x) | !is.list(x)) {stop('"x" is not of a valid class')}
+  if (!is.character(x) & !is.list(x)) {stop('"x" is not of a valid class')}
   if (is.character(x)) {x <- lapply(x, function(i) {return(tryCatch(raster(i), error=function(e) return(NULL)))})}
   if (is.list(x)) {x <- lapply(x, function(i) {return(tryCatch(is.raster(i), error=function(e) return(NULL)))})}
   if (sum(sapply(x, function(i) {is.null(i)}) > 0)) {stop('one or more elements in "x" are not valid (check entries)')}
