@@ -30,7 +30,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
   if (sum(sapply(x, function(i) {is.null(i)}) > 0)) {stop('one or more elements in "x" are not valid (check entries)')}
   
   # is y a shapefile?
-  if (!tryCatch(extent(y), error=function(e) return(FALSE))) {stop('"y" is not a valid spatial object')}
+  if (is.null(tryCatch(extent(y), error=function(e) return(NULL)))) {stop('"y" is not a valid spatial object')}
   
   # is time information provided? (required for interpolation)
   if (!missing(x.date)) {
@@ -44,7 +44,7 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
       c2 <- sum(out.date >= min(x.date) & out.date <= max(x.date))
       if (c1 == 0 & c2 == 0) {stop('"out.date" is not contained by "x.date (cannot interpolate)')}
     } else {out.date <- x.date}
-    int.timne <- TRUE
+    int.time <- TRUE
     
     # temporal buffer to search for dates to interpolate from
     if (!is.numeric(time.buffer)) {stop('"time.buffer" is not numeric')}
