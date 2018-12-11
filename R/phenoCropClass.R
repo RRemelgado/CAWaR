@@ -15,7 +15,7 @@
 #'  \item{\emph{r2} - \eqn{R^{2}} between \emph{x} and each row \emph{y}.}
 #'  \item{\emph{count} - Number of records used to estimate the \eqn{R^{2}}.}
 #'  \item{\emph{max.interval} - Maximum gap between data points when NA values exist.}}}
-#' @seealso \code{\link{analyzeTS}} \code{\link{phenoCropVal}}
+#' @seealso \code{\link{analyseTS}} \code{\link{phenoCropVal}}
 #' @examples {
 #' 
 #' require(fieldRS)
