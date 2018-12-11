@@ -117,7 +117,7 @@ extractTS <- function(x, y, z, id) {
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
   
   # extract raster value
-  if (!is.list(y)) {ev0 <- as.data.frame(extract(y, x))} else {ev0 <- as.data.frame(extract2(y, x))}
+  if (!is.list(y)) {ev0 <- as.data.frame(extract(y, x))} else {ev0 <- as.data.frame(extract2(y, x)$values)}
   
   # summary function
   summary.fun <- function(x, y) {apply(x, 2, function(j) {weighted.mean(j, y, na.rm=TRUE)})}
