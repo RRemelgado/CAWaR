@@ -74,7 +74,7 @@ extractTS <- function(x, y, z, id) {
     
     # ... if it's a list
     if(is.list(y)) {
-      if (sum(sapply(y, function(i) {is.raster(i)}))!=length(y)) {stop('one or more elements in "y" are not RasterLayers')}
+      if (sum(sapply(y, function(i) {class(i)[1]=="RasterLayer"}))!=length(y)) {stop('one or more elements in "y" are not RasterLayers')}
       nl <- length(y)
     }
     
