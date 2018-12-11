@@ -21,7 +21,7 @@ Spatialy explicit and phenology driven validation scheme for cropland mapping.
 }
 \details{
 {For each unique class in \emph{y}, the function iterates through each unique element in \emph{z} 
-and keeps it for validation. Then, it calls \code{\link{analyzeTS}} to derive reference profiles for each 
+and keeps it for validation. Then, it calls \code{\link{analyseTS}} to derive reference profiles for each 
 unique class in \emph{y} and uses them to classify the validation samples using \code{\link{phenoCropClass}}. 
 The final output consists of:
 \itemize{

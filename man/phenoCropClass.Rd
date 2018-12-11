@@ -50,5 +50,5 @@ head(c)
 }
 }
 \seealso{
-\code{\link{analyzeTS}} \code{\link{phenoCropVal}}
+\code{\link{analyseTS}} \code{\link{phenoCropVal}}
 }

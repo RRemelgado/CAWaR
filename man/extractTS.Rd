@@ -51,5 +51,5 @@ extractTS(fieldData[1:5,], r)
 }
 }
 \seealso{
-\code{\link{analyzeTS}}
+\code{\link{analyseTS}}
 }
