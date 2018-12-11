@@ -54,7 +54,9 @@ extract2 <- function(x, y, x.date, out.date, time.buffer=c(365,365)) {
     x.date <- x.date[io] # sort input dates
     out.date <- sort(out.date) # sort output dates
     
-  } else {int.time <- FALSE}
+  } else {
+    int.time <- FALSE
+    out.date <- NULL}
   
 #----------------------------------------------------------------------------------------------------------------------------------#
 # 2. extract raster values  
