@@ -4,13 +4,21 @@
 #' @param x A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.
 #' @param y A spatial object from which an extent can be derived.
 #' @param z Object of class \emph{Date} with the acquisition date for each element in \emph{x}.
+#' @param agg.fun Function used to agregate images collected in the same date. Default is the mean.
+#' @param derive.stats Logical argument. Default is FALSE.
 #' @return A list containing a \emph{RasterStack} and related statistics.
 #' @importFrom stats cor sd
 #' @importFrom ggplot2 ggplot aes_string geom_ribbon geom_line
 #' @importFrom lubridate is.Date
-#' @details {The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops it by the
-#' extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new pixels are set to NA. If
-#' \emph{z} is provided, the function will then aggregate all bands acquired in the same date \emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
+#' @importFrom raster raster extent extend res crs projectExtent projectRaster crop
+#' @importFrom rgeos intersect
+#' @details {The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops 
+#' it by the extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new 
+#' pixels are set to NA. If \emph{z} is provided, the function will then aggregate all bands acquired in the same date using 
+#' the function provide with \emph{agg.fun}.
+#' 
+#' 
+#' \emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
 #' then mean, min and max for each band. If \emph{mask} is provided, the plot will be based on all non-NA pixels. The final output of the
 #' function is a list containing:
 #' \itemize{
@@ -36,7 +44,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-meStack <- function(x, y, z, mask=NULL, derive.stats=FALSE) {
+meStack <- function(x, y, z, agg.fun=mean, derive.stats=FALSE) {
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 # 1. Check input variables
@@ -50,10 +58,10 @@ meStack <- function(x, y, z, mask=NULL, derive.stats=FALSE) {
       r <- file.exists(i)
       if (r) {
         r <- try(raster(i), silent=TRUE)
-        if (class(r)[1] != 'try-error') {return(img=r, pr=res(r)[1])} else {return(NULL)}
+        if (class(r)[1] != 'try-error') {return(list(img=r, pr=res(r)[1]))} else {return(NULL)}
       } else {return(NULL)}})}
   
-  pixel.res <- unique(sapply(x, function(i) {i$res}))
+  pixel.res <- unique(sapply(x, function(i) {i$pr}))
   if (length(pixel.res) > 1) {stop('the lements in "x" have more than 1 pixel resolution (same sensor?)')}
   x <- lapply(x, function(i) {i$img})
   
@@ -74,19 +82,19 @@ meStack <- function(x, y, z, mask=NULL, derive.stats=FALSE) {
 # 2. Build stack
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  tmp <- lapply(x, function(i) {
+  tmp <- lapply(1:length(x), function(i) {
     
     ov <- NULL
     
-    if (!is.null(i)) {
+    if (!is.null(x[[i]])) {
       
-      r <- projectRaster(crop(i, projectExtent(y,crs(i))), y) # reprojects is necessary
+      r <- projectRaster(crop(x[[i]], projectExtent(y, crs(x[[i]]))), y) # reprojects is necessary
       
-      if (tryCatch(!is.null(intersect(i, y)), error=function(e) return(FALSE), finally=TRUE)) {
+      if (tryCatch(!is.null(intersect(r, y)), error=function(e) return(FALSE), finally=TRUE)) {
         
         r <- extend(crop(r, y), y, value=NA) # crop/extend to extent
         
-      } else {r <- NULL}
+      }
       
       ov <- list(image=r, date=z[i])
     }
@@ -95,7 +103,7 @@ meStack <- function(x, y, z, mask=NULL, derive.stats=FALSE) {
 
   })
 
-  c.var <- sapply(tmp, function(i) {return(!is.null(i$image))}) # control variable (which images where used?)
+  c.var <- sapply(tmp, function(i) {return(!is.null(i))}) # control variable (which images where used?)
   o.stk <- stack(lapply(tmp[c.var], function(i) {i$image})) # output stack
   acqd <- do.call("c", lapply(tmp[c.var], function(i) {i$date})) # acquistion dates
 

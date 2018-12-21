@@ -4,7 +4,7 @@
 \alias{meStack}
 \title{meStack}
 \usage{
-meStack(x, y, z, mask = NULL, derive.stats = FALSE)
+meStack(x, y, z, agg.fun = mean, derive.stats = FALSE)
 }
 \arguments{
 \item{x}{A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.}
@@ -12,6 +12,10 @@ meStack(x, y, z, mask = NULL, derive.stats = FALSE)
 \item{y}{A spatial object from which an extent can be derived.}
 
 \item{z}{Object of class \emph{Date} with the acquisition date for each element in \emph{x}.}
+
+\item{agg.fun}{Function used to agregate images collected in the same date. Default is the mean.}
+
+\item{derive.stats}{Logical argument. Default is FALSE.}
 }
 \value{
 A list containing a \emph{RasterStack} and related statistics.
@@ -20,9 +24,13 @@ A list containing a \emph{RasterStack} and related statistics.
 Stacking of raster layers with different extents
 }
 \details{
-{The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops it by the
-extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new pixels are set to NA. If
-\emph{z} is provided, the function will then aggregate all bands acquired in the same date \emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
+{The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops 
+it by the extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new 
+pixels are set to NA. If \emph{z} is provided, the function will then aggregate all bands acquired in the same date using 
+the function provide with \emph{agg.fun}.
+
+
+\emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
 then mean, min and max for each band. If \emph{mask} is provided, the plot will be based on all non-NA pixels. The final output of the
 function is a list containing:
 \itemize{
