@@ -38,7 +38,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
+meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 # 1. Check input variables
@@ -115,22 +115,15 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
 # 3. Estimate statistics
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  if (plot) {
-
-    if (!is.null(mask)) {
-      ind <- which.max(mask)
-      sf <- function(x) {return(data.frame(mean=mean, min=min(x[ind], na.rm=TRUE),
-                                           max=max(x[ind], na.rm=TRUE),
-                                           sd=sd(x[ind], na.rm=TRUE)))}
-    } else {
-      sf <- function(x) {return(data.frame(mean=cellStats(x, mean, na.rm=TRUE),
-                                           min=cellStats(x, min, na.rm=TRUE),
-                                           max=cellStats(x, max, na.rm=TRUE),
-                                           sd=cellStats(x, sd, na.rm=TRUE)))}
-    }
-
+  if (derive.stats) {
+    
+    sf <- function(x) {return(data.frame(mean=mean, min=min(x[ind], na.rm=TRUE), max=max(x[ind], na.rm=TRUE), sd=sd(x[ind], na.rm=TRUE)))}
+    
     odf <- do.call("rbind", lapply(1:nlayers(o.stk), function(i) {sf(o.stk[[i]])}))
     odf$id <- id
+    
+    
+  }
 
     p <- ggplot(odf, aes_string(x="id")) + theme_bw() + geom_ribbon(aes_string(x='id', ymin='min', ymax='max'), fill="grey70") +
       geom_line(aes_string(y='mean')) + theme_bw() + xlab("\nBand ID") + ylab("Value\n")
@@ -146,6 +139,6 @@ meStack <- function(x, y, z, mask=NULL, plot=FALSE, fun=mean) {
 # 4. Derive output
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  return(list(stack=o.stk, statistics=odf, plot=p, id=id))
+  return(list(stack=o.stk, dates=z, image.stats=odf, stats.plot=p))
 
 }
