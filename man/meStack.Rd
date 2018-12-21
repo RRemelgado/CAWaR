@@ -4,7 +4,7 @@
 \alias{meStack}
 \title{meStack}
 \usage{
-meStack(x, y, z, mask = NULL, plot = FALSE, fun = mean)
+meStack(x, y, z, mask = NULL, derive.stats = FALSE)
 }
 \arguments{
 \item{x}{A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.}
@@ -12,12 +12,6 @@ meStack(x, y, z, mask = NULL, plot = FALSE, fun = mean)
 \item{y}{A spatial object from which an extent can be derived.}
 
 \item{z}{Object of class \emph{Date} with the acquisition date for each element in \emph{x}.}
-
-\item{mask}{Object of class \emph{RasterLayer} with the same extent as \emph{y}.}
-
-\item{plot}{Logical argument.}
-
-\item{fun}{A function. Default is mean.}
 }
 \value{
 A list containing a \emph{RasterStack} and related statistics.
@@ -33,8 +27,9 @@ then mean, min and max for each band. If \emph{mask} is provided, the plot will 
 function is a list containing:
 \itemize{
  \item{\emph{stack} - \emph{RasterStack} object.}
- \item{\emph{statistics} - Statistics for each band in the output \emph{RasterStack}.}
- \item{\emph{plot} - Plot showing the mean, minimum and maximum values per band.}
+ \item{\emph{dates} - Acquisition dates for each layer in \emph{stack}.}
+ \item{\emph{image.stats} - Statistics for each band in the output \emph{RasterStack}.}
+ \item{\emph{stats.plot} - Plot showing the mean, minimum and maximum values per band.}
  \item{\emph{control} - Logical vector showing which elements in \emph{x} where used to build the \emph{RasterStack}.}}}
 }
 \examples{

@@ -4,9 +4,6 @@
 #' @param x A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.
 #' @param y A spatial object from which an extent can be derived.
 #' @param z Object of class \emph{Date} with the acquisition date for each element in \emph{x}.
-#' @param mask Object of class \emph{RasterLayer} with the same extent as \emph{y}.
-#' @param plot Logical argument.
-#' @param fun A function. Default is mean.
 #' @return A list containing a \emph{RasterStack} and related statistics.
 #' @importFrom stats cor sd
 #' @importFrom ggplot2 ggplot aes_string geom_ribbon geom_line
@@ -18,8 +15,9 @@
 #' function is a list containing:
 #' \itemize{
 #'  \item{\emph{stack} - \emph{RasterStack} object.}
-#'  \item{\emph{statistics} - Statistics for each band in the output \emph{RasterStack}.}
-#'  \item{\emph{plot} - Plot showing the mean, minimum and maximum values per band.}
+#'  \item{\emph{dates} - Acquisition dates for each layer in \emph{stack}.}
+#'  \item{\emph{image.stats} - Statistics for each band in the output \emph{RasterStack}.}
+#'  \item{\emph{stats.plot} - Plot showing the mean, minimum and maximum values per band.}
 #'  \item{\emph{control} - Logical vector showing which elements in \emph{x} where used to build the \emph{RasterStack}.}}}
 #' @examples {
 #' 
@@ -38,7 +36,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
+meStack <- function(x, y, z, mask=NULL, derive.stats=FALSE) {
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 # 1. Check input variables
@@ -52,11 +50,16 @@ meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
       r <- file.exists(i)
       if (r) {
         r <- try(raster(i), silent=TRUE)
-        if (class(r)[1] != 'try-error') {return(r)} else {return(NULL)}
+        if (class(r)[1] != 'try-error') {return(img=r, pr=res(r)[1])} else {return(NULL)}
       } else {return(NULL)}})}
+  
+  pixel.res <- unique(sapply(x, function(i) {i$res}))
+  if (length(pixel.res) > 1) {stop('the lements in "x" have more than 1 pixel resolution (same sensor?)')}
+  x <- lapply(x, function(i) {i$img})
   
   e <- try(extent(y), silent=TRUE)
   if (class(e)[1] == 'try-error') {stop('"y" is not a valid spatial object')}
+  y <- raster(extend(extent(y), pixel.res), res=pixel.res, crs=crs(y))
 
   if (!missing("z")) {
     if (!is.Date(z)) {stop('"z" is not a "Date" vector')}
@@ -67,20 +70,28 @@ meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
   z <- vector("numeric", length(x))
   z[] <- NA}
 
-  if (!is.null(mask)) {if (extent(mask) != extent(y)) {stop('"y" and "mask" have different extents')}}
-
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 # 2. Build stack
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  tmp <- lapply(1:length(x), function(i) {
-
-    o <- tryCatch(!is.null(intersect(x[[i]], y)), error=function(e) return(FALSE))
-    if (o[1] > 0) {
-      r <- extend(crop(x[[i]], y), y, value=NA) # crop/extend to extent
-    } else {r <- NULL}
-
-    return(list(image=r, date=z[i]))
+  tmp <- lapply(x, function(i) {
+    
+    ov <- NULL
+    
+    if (!is.null(i)) {
+      
+      r <- projectRaster(crop(i, projectExtent(y,crs(i))), y) # reprojects is necessary
+      
+      if (tryCatch(!is.null(intersect(i, y)), error=function(e) return(FALSE), finally=TRUE)) {
+        
+        r <- extend(crop(r, y), y, value=NA) # crop/extend to extent
+        
+      } else {r <- NULL}
+      
+      ov <- list(image=r, date=z[i])
+    }
+    
+    return(ov)
 
   })
 
@@ -117,13 +128,16 @@ meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
 
   if (derive.stats) {
     
-    sf <- function(x) {return(data.frame(mean=mean, min=min(x[ind], na.rm=TRUE), max=max(x[ind], na.rm=TRUE), sd=sd(x[ind], na.rm=TRUE)))}
-    
-    odf <- do.call("rbind", lapply(1:nlayers(o.stk), function(i) {sf(o.stk[[i]])}))
-    odf$id <- id
-    
-    
-  }
+    odf <- do.call("rbind", lapply(1:nlayers(o.stk), function(i) {
+      
+      s1 <- cellStats(o.stk[[i]], min, na.rm=TRUE)
+      s2 <- cellStats(o.stk[[i]], max, na.rm=TRUE)
+      s3 <- cellStats(o.stk[[i]], mean, na.rm=TRUE)
+      s4 <- cellStats(o.stk[[i]], sd, na.rm=TRUE)
+      
+      return(data.frame(min=s1, max=s2, mean=s3, sd=s4))
+      
+    }))
 
     p <- ggplot(odf, aes_string(x="id")) + theme_bw() + geom_ribbon(aes_string(x='id', ymin='min', ymax='max'), fill="grey70") +
       geom_line(aes_string(y='mean')) + theme_bw() + xlab("\nBand ID") + ylab("Value\n")
@@ -139,6 +153,6 @@ meStack <- function(x, y, z, mask=NULL, fun=mean, derive.stats=FALSE) {
 # 4. Derive output
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
-  return(list(stack=o.stk, dates=z, image.stats=odf, stats.plot=p))
+  return(list(stack=o.stk, dates=acqd, image.stats=odf, stats.plot=p, control=c.var))
 
 }
