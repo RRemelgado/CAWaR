@@ -24,15 +24,13 @@ A list containing a \emph{RasterStack} and related statistics.
 Stacking of raster layers with different extents
 }
 \details{
-{The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops 
-it by the extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new 
-pixels are set to NA. If \emph{z} is provided, the function will then aggregate all bands acquired in the same date using 
-the function provide with \emph{agg.fun}.
-
-
-\emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
-then mean, min and max for each band. If \emph{mask} is provided, the plot will be based on all non-NA pixels. The final output of the
-function is a list containing:
+{The function stacks the raster objects specified in \emph{x}. For each element 
+in \emph{x}, the function crops it by the extent of \emph{y} and, if their extents differ, 
+fits the extent of \emph{x} to the one of \emph{y}. All new pixels are set to NA. If \emph{z} 
+is provided, the function will then aggregate all bands acquired in the same date using the 
+function provide with \emph{agg.fun}. If \emph{derive.stats} is set to TRUE, the function will 
+return basic statistics for each band (i.e. min, max, mean and sd) together with a plot of the 
+mean values. The final output of the function is a list containing:
 \itemize{
  \item{\emph{stack} - \emph{RasterStack} object.}
  \item{\emph{dates} - Acquisition dates for each layer in \emph{stack}.}
@@ -48,6 +46,8 @@ require(raster)
 r1 <- raster(xmn=1, xmx=90, ymn=1, ymx=90, res=1, vals=1) # image 1
 r2 <- raster(xmn=50, xmx=150, ymn=50, ymx=150, res=1, vals=1) # image 2
 r0 <- raster(xmn=20, xmx=90, ymn=50, ymx=90, res=1, vals=1) # target extent
+
+crs(r0) <- crs(r2) <- crs(r1)
 
 mes <- meStack(list(r1, r2), r0)
 plot(mes$stack)

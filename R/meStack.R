@@ -12,15 +12,13 @@
 #' @importFrom lubridate is.Date
 #' @importFrom raster raster extent extend res crs projectExtent projectRaster crop
 #' @importFrom rgeos intersect
-#' @details {The function stacks the raster objects specified in \emph{x}. For each element in \emph{x}, the function crops 
-#' it by the extent of \emph{y} and, if their extents differ, fits the extent of \emph{x} to the one of \emph{y}. All new 
-#' pixels are set to NA. If \emph{z} is provided, the function will then aggregate all bands acquired in the same date using 
-#' the function provide with \emph{agg.fun}.
-#' 
-#' 
-#' \emph{plot} is set to TRUE, the function will derive basic statistics for each band (i.e. min, max, mean, sd) as well as a plot showing
-#' then mean, min and max for each band. If \emph{mask} is provided, the plot will be based on all non-NA pixels. The final output of the
-#' function is a list containing:
+#' @details {The function stacks the raster objects specified in \emph{x}. For each element 
+#' in \emph{x}, the function crops it by the extent of \emph{y} and, if their extents differ, 
+#' fits the extent of \emph{x} to the one of \emph{y}. All new pixels are set to NA. If \emph{z} 
+#' is provided, the function will then aggregate all bands acquired in the same date using the 
+#' function provide with \emph{agg.fun}. If \emph{derive.stats} is set to TRUE, the function will 
+#' return basic statistics for each band (i.e. min, max, mean and sd) together with a plot of the 
+#' mean values. The final output of the function is a list containing:
 #' \itemize{
 #'  \item{\emph{stack} - \emph{RasterStack} object.}
 #'  \item{\emph{dates} - Acquisition dates for each layer in \emph{stack}.}
@@ -34,6 +32,8 @@
 #' r1 <- raster(xmn=1, xmx=90, ymn=1, ymx=90, res=1, vals=1) # image 1
 #' r2 <- raster(xmn=50, xmx=150, ymn=50, ymx=150, res=1, vals=1) # image 2
 #' r0 <- raster(xmn=20, xmx=90, ymn=50, ymx=90, res=1, vals=1) # target extent
+#' 
+#' crs(r0) <- crs(r2) <- crs(r1)
 #' 
 #' mes <- meStack(list(r1, r2), r0)
 #' plot(mes$stack)
@@ -50,25 +50,33 @@ meStack <- function(x, y, z, agg.fun=mean, derive.stats=FALSE) {
 # 1. Check input variables
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 
+  # check if x is a valid object
   if (!class(x)[1] %in% c("character", "list")) {stop('"x" is not of a valid class')}
   if (length(x) == 1) {stop('"x" only has 1 element')}
   
+  
+  # read x as a list of rasters if it is a character vector with image paths
   if (is.character(x)) {
     x <- lapply(x, function(i) {
       r <- file.exists(i)
       if (r) {
         r <- try(raster(i), silent=TRUE)
-        if (class(r)[1] != 'try-error') {return(list(img=r, pr=res(r)[1]))} else {return(NULL)}
+        if (class(r)[1] != 'try-error') {return(r)} else {return(NULL)}
       } else {return(NULL)}})}
   
-  pixel.res <- unique(sapply(x, function(i) {i$pr}))
-  if (length(pixel.res) > 1) {stop('the lements in "x" have more than 1 pixel resolution (same sensor?)')}
-  x <- lapply(x, function(i) {i$img})
+  # test if all rasters are usable
+  if (sum(sapply(x, function(i) {is.null(i)})) > 0) {stop('one or more elements in "x" are not valid rasters')}
   
+  # check if the pixel resolution of individual images differ
+  pixel.res <- unique(sapply(x, function(i) {res(i)[1]}))
+  if (length(pixel.res) > 1) {stop('the lements in "x" have more than 1 pixel resolution (same sensor?)')}
+  
+  # see if y is a valid spatial object
   e <- try(extent(y), silent=TRUE)
   if (class(e)[1] == 'try-error') {stop('"y" is not a valid spatial object')}
   y <- raster(extend(extent(y), pixel.res), res=pixel.res, crs=crs(y))
 
+  # check if temporal information was provided
   if (!missing("z")) {
     if (!is.Date(z)) {stop('"z" is not a "Date" vector')}
     if (length(x) != length(z)) {stop('"x" and "z" have different lenghts')}
@@ -84,20 +92,15 @@ meStack <- function(x, y, z, agg.fun=mean, derive.stats=FALSE) {
 
   tmp <- lapply(1:length(x), function(i) {
     
-    ov <- NULL
+    ref <- projectExtent(y, crs(x[[i]])) # reference extent (used for reprojection)
     
-    if (!is.null(x[[i]])) {
-      
-      r <- projectRaster(crop(x[[i]], projectExtent(y, crs(x[[i]]))), y) # reprojects is necessary
-      
-      if (tryCatch(!is.null(intersect(r, y)), error=function(e) return(FALSE), finally=TRUE)) {
+    if (tryCatch(!is.null(intersect(x[[i]], ref)), error=function(e) return(FALSE), finally=TRUE)) {
         
-        r <- extend(crop(r, y), y, value=NA) # crop/extend to extent
-        
-      }
+      r <- projectRaster(crop(x[[i]], ref), y) # reprojects is necessary
+      r <- extend(crop(r, y), y, value=NA) # crop/extend to extent
+      ov <- list(image=r, date=z[i]) # return image/daye
       
-      ov <- list(image=r, date=z[i])
-    }
+    } else {ov <- NULL}
     
     return(ov)
 
