@@ -117,7 +117,7 @@ meStack <- function(x, y, z, agg.fun=mean, derive.stats=FALSE) {
     # combine images with same dates
     o.stk <- stack(lapply(ud, function(d) {
       i <- which(acqd == d)
-      if (length(i) > 1) {r <- calc(o.stk[[i]], fun, na.rm=TRUE)} else {r <- o.stk[[i]]}
+      if (length(i) > 1) {r <- calc(o.stk[[i]], agg.fun, na.rm=TRUE)} else {r <- o.stk[[i]]}
       return(r)}))
 
     si <- order(ud) # date sorting indices

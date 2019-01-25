@@ -49,7 +49,7 @@ r <- brick(system.file("extdata", "ndvi.tif", package="fieldRS"))
 data(fieldData)
 data(fieldDataTS)
 
-a.ts <- analyzeTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
+a.ts <- analyseTS(as.data.frame(fieldDataTS$weighted.mean), fieldData$crop)
 
 # extract reference profiles
 rp <- as.data.frame(do.call(rbind, lapply(a.ts$y.statistics, function(i) {i$median})))

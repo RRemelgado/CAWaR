@@ -2,16 +2,15 @@ Package: CAWaR
 Type: Package
 Title: CAWa Project R Package
 Version: 0.0.1
-Date: 2018-12-07
+Date: 2019-01-25
 Authors@R: person("Ruben", "Remelgado", role = c("aut", "cre"), email="remelgado.ruben@gmail.com")
 URL: https://github.com/RRemelgado/fieldRS/
 BugReports: https://github.com/RRemelgado/fieldRS/issues/
-Maintainer: Ruben Remelgado <ruben.remelgado@uni-wuerzburg.de>
+Maintainer: Ruben Remelgado <remelgado.ruben@gmail.com>
 Description: Package developmed in the Scope of the CAWa project. It provides tools to process ground-truth data on crop types and perform a phenology based crop type classification which extends on the work of Conrad et al. (2011) <doi:10.1080/01431161.2010.550647>. Moreover, the package introduces an innovative classification and validation scheme that utilizes spatialy independent samples as proposed by Remelgado et al. (2017) <doi:10.1002/rse2.70>.
 LazyData: TRUE
 Encoding: UTF-8
-Imports: raster, sp, rgdal, ggplot2, grDevices, spatialEco, rgeos, lubridate, RStoolbox
-Remotes: RRemelgado/rsMove, RRemelgado/fieldRS
+Imports: raster, sp, rgdal, ggplot2, grDevices, spatialEco, rgeos, lubridate, RStoolbox, fieldRS, rsMove
 RoxygenNote: 6.1.1
 License: GPL (>= 3)
 Suggests: knitr, rmarkdown, kableExtra, imager, lattice
