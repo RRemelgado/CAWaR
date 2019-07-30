@@ -1,6 +1,6 @@
 #' @title countCropCycles
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Matches two vectors with different lenghts based on their maximum value.
+#' @description Matches two vectors with different lengths based on their maximum value.
 #' @param x Target numeric \emph{vector}.
 #' @param min.length Two element numeric \emph{vector}.
 #' @importFrom raster which.max
@@ -10,7 +10,7 @@
 #' is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
 #' cultivated/harvested). If the segment length is greater than the 1st element in \emph{min.length} the 
 #' segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
-#' the mean (i.e. crop growth/maturity). If the length of a segment is greater than the 2nd element in 
+#' the mean (i.e. crop growth/maturity). If the length of a segment is greater than the second element in 
 #' \emph{min.length} it is labeled as "recently cultivated/harvested".}
 #' @examples {
 #' 

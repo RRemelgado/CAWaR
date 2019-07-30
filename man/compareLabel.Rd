@@ -27,10 +27,10 @@ Identifies samples that potentially require class label corrections.
 }
 \details{
 {The function cross-correlates \emph{x} and \emph{y}. Then,for each row, the function returns 
-the element in \emph{y.label} with the highest correlation. The funal output of the function consists:
+the element in \emph{y.label} with the highest correlation. The final output of the function consists:
 \itemize{
  \item{\emph{cross.cor} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}
- \item{\emph{label.compare} - \emph{data.frame} showing \emph{y.label} and the nbest match in \emph{y.label}.}
+ \item{\emph{label.compare} - \emph{data.frame} showing \emph{y.label} and the best match in \emph{y.label}.}
  \item{\emph{na.stats} - \emph{data.frame} showing the count and maximum number of consecutive NA values for each row in \emph{x}.}
  }
  Note that \emph{na.count} and \emph{max.length} determine which observations are judged. If These thresholds are exceeded, 

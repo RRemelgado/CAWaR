@@ -4,7 +4,7 @@
 #' @param x A numeric \emph{vector}.
 #' @param y A numeric element.
 #' @return A logical element.
-#' @details {The function computes the amplitude of \emph{x} and returns TRUE if this value is below the threhsold given by \emph{y}.}
+#' @details {The function computes the amplitude of \emph{x} and returns TRUE if this value is below the threshold given by \emph{y}.}
 #' @examples {
 #' 
 #' # vectors to test

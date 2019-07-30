@@ -14,7 +14,7 @@
   * findBare()
   * extractTS()
   * extract2()
-  * countCropCzcles()
+  * countCropCycles()
   * compareLabel()
   * checkSamples()
   * analyzeTS()

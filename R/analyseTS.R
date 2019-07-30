@@ -4,11 +4,11 @@
 #' @param x Object of class \emph{data.frame}.
 #' @param y Vector of class \emph{character} or \emph{numeric} with a length equal to the number of rows in \emph{x}.
 #' @param out.plot Specifies the data path where plots should be stored.
-#' @return A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampeled pixels.
+#' @return A \emph{SpatialPointsDataDrame} with the coordinate pairs for each of the sampled pixels.
 #' @importFrom ggplot2 ggplot aes_string theme_bw ggtitle geom_ribbon geom_line xlab ylab ylim ggsave
 #' @importFrom stats median mad
 #' @details {For each unique value in \emph{y}, the function will select the rows in \emph{x} that correspond to it and estimate the
-#' median, Median Absolte Deviation (MAD), minimum, maximum, mean and standard deviation for each column. Then, the function will build
+#' median, Median Absolute Deviation (MAD), minimum, maximum, mean and standard deviation for each column. Then, the function will build
 #' a plot showing the median and draw a buffer that expresses the minimum and maximum. The final output is a list consisting of:
 #' \itemize{
 #'  \item{\emph{y.statistics} - Median, minimum and maximum values for each column in \emph{x} over each unique class in \emph{y}.}

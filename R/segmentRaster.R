@@ -1,6 +1,6 @@
 #' @title segmentRaster
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Segmentation of a raster object using k-means clustering and connected component labelling.
+#' @description Segmentation of a raster object using k-means clustering and connected component labeling.
 #' @param x Object of class \emph{RasterLayer}.
 #' @param change.threshold Numeric element (0 - 100).
 #' @param n.size Numeric element.
@@ -11,7 +11,7 @@
 #' @details {The function clusters a raster object with k-means through \link[RStoolbox]{unsuperClass} and segments the output using
 #' \link[fieldRS]{ccLabel}. The number of samples used to determine the number of clusters can be defined through \emph{n.size} to reduce
 #' the required computational time. The optimal number of clusters is determined with the elbow method. he elbow method looks at the
-#' percentage of variance explained by the number of clusters. If adding a new cluster, refered here as k, leads to no improvement,
+#' percentage of variance explained by the number of clusters. If adding a new cluster, referred here as k, leads to no improvement,
 #' the function will use k-1 to derive. This breakpoint is determined by \emph{change.threshold} which controls the percent change
 #' between the amount of variance explained by two consequent k values. the output is a list consisting of:
 #'  \itemize{

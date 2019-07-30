@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Extracts time series data from a \emph{RasterStack} for a \emph{SpatialPolygons} or a \emph{SpatialPolygonsDataFrame} object.
 #' @param x Object of class \emph{SpatialPolygons}, \emph{SpatialPolygonsDataFrame}, \emph{SpatialPoints} or \emph{SpatialPointsDataFrame}.
-#' @param y A \emph{raster} object, a list of \emph{RasterLayer}'s or a numeric element.
+#' @param y A \emph{raster} object, a list of \emph{RasterLayer} objects or a numeric element.
 #' @param z \emph{Numeric} vector with weights for each element in \emph{x} (when points).
 #' @param id \emph{Numeric} vector with unique identifiers for \emph{x} (when points).
 #' @return A \emph{list}.
@@ -10,7 +10,7 @@
 #' @importFrom fieldRS poly2sample
 #' @importFrom stats sd
 #' @details {For each polygon in \emph{x} - if \emph{x} is a \emph{SpatialPolygons} and \emph{SpatialPolygonsDataFrame} object - the function 
-#' identifies the overlapping pixels in \emph{y} and, for each pixel, estimates thepercentage area covered by the polygon. Using this data as 
+#' identifies the overlapping pixels in \emph{y} and, for each pixel, estimates the percentage area covered by the polygon. Using this data as 
 #' weights, the function calculates the weighted mean for each band in \emph{y}. If \emph{y} is a numeric element, the function will build a 
 #' raster with resolution equal to \emph{y} over which the pixel cover will be estimated. Moreover, if \emph{x} is a \emph{SpatialPoints} or 
 #' a \emph{SpatialPointsDataFrame} object, the function will skip the pixel extraction step. In this case, the user may provide a vector with 

@@ -17,7 +17,7 @@ phenoCropVal(x, y, z)
 A \emph{list} containing a set of reference profiles for each unique class in \emph{y}.
 }
 \description{
-Spatialy explicit and phenology driven validation scheme for cropland mapping.
+Spatially explicit and phenology driven validation scheme for cropland mapping.
 }
 \details{
 {For each unique class in \emph{y}, the function iterates through each unique element in \emph{z} 
@@ -25,8 +25,8 @@ and keeps it for validation. Then, it calls \code{\link{analyseTS}} to derive re
 unique class in \emph{y} and uses them to classify the validation samples using \code{\link{phenoCropClass}}. 
 The final output consists of:
 \itemize{
- \item{\emph{sample.validation} - A \emph{logical} vector with the same length of \emph{x} where TRUE means it was correctly classied.}
- \item{\emph{predicted.class} - A \emph{chracter} cector with the predicted classes for each sample.}
+ \item{\emph{sample.validation} - A \emph{logical} vector with the same length of \emph{x} where TRUE means it was correctly classified.}
+ \item{\emph{predicted.class} - A \emph{character} vector with the predicted classes for each sample.}
  \item{\emph{sample.count} - A \emph{numeric} vector with the number of non-NA used for validation per sample.}
  \item{\emph{sample.r2} - A \emph{numeric} vector with the r2 value between the target sample and the selected class profile.}
  \item{\emph{class.accuracy} - A \emph{data.frame} with sample count per class, precision, recall and F1-scores per unique class in \emph{y}.}}}

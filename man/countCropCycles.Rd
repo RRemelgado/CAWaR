@@ -15,7 +15,7 @@ countCropCycles(x, min.length = c(1, 1))
 A \emph{numeric} element with the number of crop cycles in \emph{x}.
 }
 \description{
-Matches two vectors with different lenghts based on their maximum value.
+Matches two vectors with different lengths based on their maximum value.
 }
 \details{
 {The function counts the number of value segments in \emph{x} that are above its mean 
@@ -23,7 +23,7 @@ effectively counting the number of crop cycles. Before reporting the final value
 is used to filter outliers. The first element filters segments that lie below the mean (i.e. recently 
 cultivated/harvested). If the segment length is greater than the 1st element in \emph{min.length} the 
 segment is relabeled as "1 (i.e. "crop growth/maturity". This process is repeated for segments above 
-the mean (i.e. crop growth/maturity). If the length of a segment is greater than the 2nd element in 
+the mean (i.e. crop growth/maturity). If the length of a segment is greater than the second element in 
 \emph{min.length} it is labeled as "recently cultivated/harvested".}
 }
 \examples{

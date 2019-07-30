@@ -17,7 +17,7 @@ matchIndices(x, y, z)
 A \emph{list} with selected indices for \emph{x} and \emph{y}.
 }
 \description{
-Matches two vectors with different lenghts based on their maximum value.
+Matches two vectors with different lengths based on their maximum value.
 }
 \details{
 {Uses Dynamic Time Wrapping (DTW) to match \emph{x} and \emph{y}. \emph{z} determines 

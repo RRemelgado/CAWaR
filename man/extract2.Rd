@@ -7,7 +7,7 @@
 extract2(x, y, x.date, out.date, time.buffer = c(365, 365))
 }
 \arguments{
-\item{x}{A \emph{character} vector with the paths to \emph{RasterLayers} or a \emph{list} of \emph{RasterLayers}.}
+\item{x}{A \emph{character} vector with the paths to \emph{RasterLayer} objects or a \emph{list} of \emph{RasterLayers}.}
 
 \item{y}{An object of class \emph{SpatialPoints} or \emph{SpatialPolygons}.}
 
@@ -24,6 +24,6 @@ A \emph{list} object.
 Extract of values from multi-extent raster objects with a spatial object.
 }
 \details{
-{Creates a rectangular fishnet in a \emph{SpatialPolygon} format based on the 
+{Creates a rectangular fishnet in a \emph{SpatialPolygons} format based on the 
 extent of \emph{x} and the value of \emph{y} which defines the spatial resolution.}
 }

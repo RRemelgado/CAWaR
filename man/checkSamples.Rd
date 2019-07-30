@@ -19,7 +19,7 @@ checks if a shapefile with ground truth data contains all the necessary fields i
 {Checks if a shapefile - or a list of - contains necessary columns and if these have the right format. It searches for:
 \itemize{
  \item{\emph{sampler} - Character vector with name of responsible person.}
- \item{\emph{date} - Date vector with the date on which each sample was collected (formated as "yyyy-mm-dd").}
+ \item{\emph{date} - Date vector with the date on which each sample was collected (formatted as "yyyy-mm-dd").}
  \item{\emph{label} - Character vector sample label (e.g. land cover class).}}}
 }
 \examples{

@@ -1,7 +1,7 @@
 #' @title extract2
 #----------------------------------------------------------------------------------------------------------------------------------#
 #' @description Extract of values from multi-extent raster objects with a spatial object. 
-#' @param x A \emph{character} vector with the paths to \emph{RasterLayers} or a \emph{list} of \emph{RasterLayers}.
+#' @param x A \emph{character} vector with the paths to \emph{RasterLayer} objects or a \emph{list} of \emph{RasterLayers}.
 #' @param y An object of class \emph{SpatialPoints} or \emph{SpatialPolygons}.
 #' @param x.date Object of class \emph{Date} with the acquisition dates of each element in \emph{x}.
 #' @param out.date Object of class \emph{Date} with the desired output dates.
@@ -10,7 +10,7 @@
 #' @importFrom raster raster
 #' @importFrom lubridate is.Date
 #' @importFrom rsMove intime
-#' @details {Creates a rectangular fishnet in a \emph{SpatialPolygon} format based on the 
+#' @details {Creates a rectangular fishnet in a \emph{SpatialPolygons} format based on the 
 #' extent of \emph{x} and the value of \emph{y} which defines the spatial resolution.}
 #' @export
 

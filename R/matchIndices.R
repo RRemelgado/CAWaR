@@ -1,6 +1,6 @@
 #' @title matchIndices
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
-#' @description Matches two vectors with different lenghts based on their maximum value.
+#' @description Matches two vectors with different lengths based on their maximum value.
 #' @param x Target numeric \emph{vector}.
 #' @param y Reference numeric \emph{vector}.
 #' @param z A \emph{numeric} element.

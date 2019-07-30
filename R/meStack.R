@@ -1,10 +1,10 @@
 #' @title meStack
 #-----------------------------------------------------------------------------------------------------------------------------------------------#
 #' @description Stacking of raster layers with different extents
-#' @param x A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.
+#' @param x A \emph{list} of \emph{RasterLayer} objects or a \emph{character} vector with the paths to \emph{raster} objects.
 #' @param y A spatial object from which an extent can be derived.
 #' @param z Object of class \emph{Date} with the acquisition date for each element in \emph{x}.
-#' @param agg.fun Function used to agregate images collected in the same date. Default is the mean.
+#' @param agg.fun Function used to aggregate images collected in the same date. Default is the mean.
 #' @param derive.stats Logical argument. Default is FALSE.
 #' @return A list containing a \emph{RasterStack} and related statistics.
 #' @importFrom stats cor sd

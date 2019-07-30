@@ -18,7 +18,7 @@ A logical element.
 Shows is a vector is related to bare/fallow land..
 }
 \details{
-{The function computes the amplitude of \emph{x} and returns TRUE if this value is below the threhsold given by \emph{y}.}
+{The function computes the amplitude of \emph{x} and returns TRUE if this value is below the threshold given by \emph{y}.}
 }
 \examples{
 {

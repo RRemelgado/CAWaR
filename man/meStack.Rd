@@ -7,13 +7,13 @@
 meStack(x, y, z, agg.fun = mean, derive.stats = FALSE)
 }
 \arguments{
-\item{x}{A \emph{list} of \emph{RasterLayers} or a \emph{character} vector with the paths to \emph{raster} objects.}
+\item{x}{A \emph{list} of \emph{RasterLayer} objects or a \emph{character} vector with the paths to \emph{raster} objects.}
 
 \item{y}{A spatial object from which an extent can be derived.}
 
 \item{z}{Object of class \emph{Date} with the acquisition date for each element in \emph{x}.}
 
-\item{agg.fun}{Function used to agregate images collected in the same date. Default is the mean.}
+\item{agg.fun}{Function used to aggregate images collected in the same date. Default is the mean.}
 
 \item{derive.stats}{Logical argument. Default is FALSE.}
 }
