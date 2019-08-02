@@ -1,6 +1,6 @@
 Package: CAWaR
 Type: Package
-Title: CAWa Project tools
+Title: CAWa Project Tools
 Version: 0.0.1
 Date: 2019-07-30
 Authors@R: person("Ruben", "Remelgado", role = c("aut", "cre"), email="remelgado.ruben@gmail.com")
