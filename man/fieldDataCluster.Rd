@@ -4,7 +4,9 @@
 \name{fieldDataCluster}
 \alias{fieldDataCluster}
 \title{Region labels for fieldData}
-\format{A data.frame}
+\format{
+A data.frame
+}
 \usage{
 data(fieldDataCluster)
 }

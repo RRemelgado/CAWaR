@@ -4,7 +4,9 @@
 \name{fieldDataTS}
 \alias{fieldDataTS}
 \title{Samples for fieldData}
-\format{A data.frame}
+\format{
+A data.frame
+}
 \usage{
 data(fieldDataTS)
 }

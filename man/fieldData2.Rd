@@ -4,7 +4,9 @@
 \name{fieldData2}
 \alias{fieldData2}
 \title{Point shapefile.}
-\format{A SpatialPointsDataFrame}
+\format{
+A SpatialPointsDataFrame
+}
 \usage{
 data(fieldData2)
 }

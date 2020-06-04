@@ -1,6 +1,7 @@
 #' CAWaR.
 #'
 #' @name CAWaR
+#' @description Example data of the CAWaR package.
 #' @docType package
 #' @import raster sp
 NULL

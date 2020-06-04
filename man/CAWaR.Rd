@@ -3,8 +3,7 @@
 \docType{package}
 \name{CAWaR}
 \alias{CAWaR}
-\alias{CAWaR-package}
 \title{CAWaR.}
 \description{
-CAWaR.
+Example data of the CAWaR package.
 }
